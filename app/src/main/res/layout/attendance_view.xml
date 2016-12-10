@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+
+    <TextView
+        android:id="@+id/adate"
+        style="@style/AttendanceViewStyle"
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        android:text="Date" />
+
+
+    <TextView
+        android:id="@+id/aname"
+        android:layout_width="0dp"
+        android:layout_weight="0.75"
+        android:gravity="center"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        style="@style/AttendanceViewStyle"
+        android:text="Name" />
+
+
+    <TextView
+        android:id="@+id/acourse"
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        style="@style/AttendanceViewStyle"
+        android:text="Course" />
+
+    <TextView
+        android:id="@+id/ainst"
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        style="@style/AttendanceViewStyle"
+        android:text="Instructor" />
+
+</LinearLayout>

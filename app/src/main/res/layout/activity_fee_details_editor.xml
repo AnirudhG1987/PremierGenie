@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_fee_details_editor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.premiergenie.pgbbay.FeeDetails.FeeDetailsEditorActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:text="DatePaid"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+
+        <EditText
+            android:id="@+id/edit_fdate"
+            android:hint="Date"
+            android:inputType="text"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_stuname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Student"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+        <EditText
+            android:id="@+id/edit_fsname"
+            android:hint="Student Name"
+            android:inputType="text"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/container_course"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:text="Course"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+        <Spinner
+            android:id="@+id/fee_Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:text="Amount Paid"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+        <EditText
+            android:id="@+id/edit_famount"
+            android:hint="Amount Paid"
+            android:inputType="number"
+            style="@style/EditorFieldStyle"/>
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

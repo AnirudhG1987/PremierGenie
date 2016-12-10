@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_margin"
+    tools:context=".Attendance.AttendanceEditorActivity">
+
+
+    <LinearLayout
+        android:id="@+id/container_stufname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="First Name"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+        <EditText
+            android:id="@+id/edit_sfname"
+            android:hint="First Name"
+            android:inputType="text"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_stulname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Last Name"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+        <EditText
+            android:id="@+id/edit_slname"
+            android:hint="Last Name"
+            android:inputType="text"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/container_grade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Grade"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+        <EditText
+            android:id="@+id/edit_grade"
+            android:hint="Grade"
+            android:inputType="number"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_age"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Age"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+        <EditText
+            android:id="@+id/edit_age"
+            android:hint="Age"
+            android:inputType="number"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_schoolname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="School Name"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+        <EditText
+            android:id="@+id/edit_scname"
+            android:hint="School Name"
+            android:inputType="text"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_parentname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Parent Name"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+        <EditText
+            android:id="@+id/edit_spname"
+            android:hint="Parent Name"
+            android:inputType="text"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Email"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+        <EditText
+            android:id="@+id/edit_semail"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_sphone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Phone"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+        <EditText
+            android:id="@+id/edit_sphone"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+
+</LinearLayout>

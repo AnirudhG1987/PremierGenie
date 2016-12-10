@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string-array name="array_courses">
+
+        <item>@string/course1</item>
+        <item>@string/course2</item>
+        <item>@string/course3</item>
+        <item>@string/course4</item>
+        <item>@string/course5</item>
+
+    </string-array>
+
+    <string-array name="array_instructors">
+
+        <item>@string/instructor1</item>
+        <item>@string/instructor2</item>
+        <item>@string/instructor3</item>
+        <item>@string/instructor4</item>
+        <item>@string/instructor5</item>
+
+    </string-array>
+
+</resources>

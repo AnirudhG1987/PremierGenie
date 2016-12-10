@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="primary_color">#4A312A</color>
+
+    <!-- Primary dark color of the app (shown in the status bar) -->
+    <color name="primary_dark_color">#2F1D1A</color>
+
+    <!-- Background color for app -->
+    <color name="tan_background">#FFF7DA</color>
+
+    <!-- Background color for the numbers category -->
+    <color name="category_students">#FD8E09</color>
+
+    <!-- Background color for the family members category -->
+    <color name="category_courses">#379237</color>
+
+    <!-- Background color for the colors category -->
+    <color name="category_fee">#8800A0</color>
+
+    <!-- Background color for the phrases category -->
+    <color name="category_expense">#16AFCA</color>
+
+
+    <color name="bg_login">#26ae90</color>
+    <color name="bg_register">#2e3237</color>
+    <color name="bg_main">#428bca</color>
+    <color name="white">#ffffff</color>
+    <color name="input_login">#222222</color>
+    <color name="input_login_hint">#999999</color>
+    <color name="input_register">#888888</color>
+    <color name="input_register_bg">#3b4148</color>
+    <color name="input_register_hint">#5e6266</color>
+    <color name="btn_login">#26ae90</color>
+    <color name="btn_login_bg">#eceef1</color>
+    <color name="lbl_name">#333333</color>
+    <color name="btn_logut_bg">#ff6861</color>
+        <!-- The app branding color for the app bar -->
+
+
+
+
+        <!-- Primary color for the editor -->
+
+        <color name="editorColorPrimary">#2D3640</color>
+
+
+
+        <!-- Primary dark color for the editor -->
+
+        <color name="editorColorPrimaryDark">#394450</color>
+
+    </resources>
+

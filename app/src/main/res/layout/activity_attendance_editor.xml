@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_margin"
+    tools:context=".Attendance.AttendanceEditorActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:text="Date"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+
+          <EditText
+                android:id="@+id/edit_date"
+                android:hint="Date"
+                android:inputType="text"
+                style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+  <LinearLayout
+        android:id="@+id/container_stuname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+     <TextView
+            android:text="Student"
+         android:layout_height="40dp"
+         style="@style/AttenEditorStyle" />
+      <EditText
+          android:id="@+id/edit_sname"
+          android:hint="Student Name"
+          android:inputType="text"
+          style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_instructor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:text="Instructor"
+            style="@style/AttenEditorStyle" />
+        <Spinner
+            android:id="@+id/edit_inst"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/container_course"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:text="Course"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+        <Spinner
+            android:id="@+id/course_Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.premiergenie.pgbbay.PGBbay_DatabaseActivity">
+
+    <TextView
+        android:id="@+id/Students"
+        android:text="Students"
+        style="@style/CategoryStyle"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/category_students"
+        />
+
+    <TextView
+        android:id="@+id/Courses"
+        android:text="Courses"
+        style="@style/CategoryStyle"
+        android:background="@color/category_courses"
+        android:onClick="onCoursesClick"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <TextView
+        android:id="@+id/Fee_Details"
+        android:text="Fee Details"
+        style="@style/CategoryStyle"
+        android:background="@color/category_fee"
+        android:onClick="onFeeClick"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/Attendance"
+        android:text="Attendance"
+        style="@style/CategoryStyle"
+        android:background="@color/category_expense"
+        android:onClick="onAttendanceClick"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/FileUpload"
+        android:text="File Upload"
+        style="@style/CategoryStyle"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/category_students"
+        />
+
+</LinearLayout>
