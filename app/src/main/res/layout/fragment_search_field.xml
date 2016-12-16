@@ -2,27 +2,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="@drawable/border"
     tools:context="com.premiergenie.pgbbay.Fragment.SearchFieldFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <EditText
+        android:id="@+id/searchSName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Student Name"
+        android:hint="Student"
+        android:maxLines="1"
+        android:imeActionLabel="Done"
+        android:imeOptions="actionDone"
         android:layout_weight="1"/>
 
     <EditText
+        android:id="@+id/searchDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Date"
         android:layout_weight="1"/>
 
-    <Spinner
+    <EditText
+        android:id="@+id/searchSubject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Month"
+        android:hint="Subject"
+        android:layout_weight="1"/>
+
+    <EditText
+        android:id="@+id/searchInst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Instructor"
         android:layout_weight="1"/>
 
     <Button

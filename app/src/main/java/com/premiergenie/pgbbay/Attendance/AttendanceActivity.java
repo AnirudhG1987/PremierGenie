@@ -39,26 +39,6 @@ public class AttendanceActivity extends AppCompatActivity {
 
         mfiredatabaseRef = FirebaseDatabase.getInstance().getReference("attendance");
 
-       /*mfiredatabaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mattendanceList.clear();
-                for (DataSnapshot data: dataSnapshot.getChildren()) {
-
-                    AttendanceClass attendanceClass = data.getValue(AttendanceClass.class);
-                    attendanceClass.setKey(data.getKey());
-                     mattendanceList.add(attendanceClass);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-
-        });
-*/
         Query latestAttendance = mfiredatabaseRef.orderByChild("studentName");
         //mfiredatabaseRef.addChildEventListener(new ChildEventListener() {
         latestAttendance.addChildEventListener(new ChildEventListener() {

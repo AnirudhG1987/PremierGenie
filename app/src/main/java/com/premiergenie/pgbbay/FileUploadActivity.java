@@ -1,33 +1,37 @@
 package com.premiergenie.pgbbay;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.premiergenie.pgbbay.Fragment.SearchFieldFragment;
 import com.premiergenie.pgbbay.Fragment.SearchResultFragment;
 
-/**
- * Created by Anirudh on 11/25/2016.
- */
 
-public class FileUploadActivity  extends FragmentActivity {
+public class FileUploadActivity  extends FragmentActivity implements SearchFieldFragment.OnSubmitSelectedListener {
+
+
+    private EditText sNameEditTxt;
+
+    private android.support.v4.app.FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fileupload);
 
-        SearchFieldFragment sff = new SearchFieldFragment();
-        SearchResultFragment srf = new SearchResultFragment();
+        sNameEditTxt = (EditText) findViewById(R.id.searchSName);
+
 
         FragmentManager manager = getSupportFragmentManager();
-
-        FragmentTransaction transaction;
         transaction = manager.beginTransaction();
-        transaction.add(R.id.search_fragment, sff, "Frag_Top_tag");
-        transaction.add(R.id.result_fragment, srf, "Frag_Bottom_tag");
+        SearchResultFragment srf = new SearchResultFragment();
+        transaction.add(R.id.result_fragment,srf,"Result_Frag");
         transaction.commit();
 
          /*
@@ -67,7 +71,43 @@ public class FileUploadActivity  extends FragmentActivity {
 
 */
 
+
+
+
     }
 
 
+    @Override
+    public void onSubmitClicked(String date, String studentName) {
+       /* Fragment srf = null;
+        srf = getSupportFragmentManager().findFragmentByTag("Your_Fragment_TAG");
+        final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.detach(frg);
+        ft.attach(frg);
+        ft.commit();
+        */
+
+        sNameEditTxt.setText("");
+        sNameEditTxt.clearFocus();
+
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.result_fragment);
+        if (f!=null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(f).commit();
+        }
+
+        SearchResultFragment srf = new SearchResultFragment();
+        Bundle b = new Bundle();
+        b.putString("sName",studentName);
+        srf.setArguments(b);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.result_fragment, srf).commit();
+
+    }
 }
