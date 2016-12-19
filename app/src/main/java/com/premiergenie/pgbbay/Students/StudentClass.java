@@ -9,33 +9,36 @@ public class StudentClass {
     private int grade;
     private int age;
     private String firstName;
-    private String lasttName;
+    private String lastName;
     private String parentName;
     private String schoolName;
+    private String curriculum;
     private String primaryEmail;
     private String phoneNumber;
 
     public StudentClass(){}
 
-    public StudentClass(String firstName, String lastName, String parentName, String schoolName, int grade, int age, String primaryEmail, String phoneNumber){
+    public StudentClass(String firstName, String lastName, String parentName, String schoolName, int grade, int age, String primaryEmail, String phoneNumber, String curriculum){
         this.firstName = firstName;
-        this.lasttName = lastName;
+        this.lastName = lastName;
         this.schoolName = schoolName;
         this.parentName = parentName;
         this.grade = grade;
         this.age = age;
         this.primaryEmail = primaryEmail;
         this.phoneNumber = phoneNumber;
+        this.curriculum = curriculum;
     }
 
 
     public int getGrade(){return grade;}
     public String getFirstName(){return firstName;}
-    public String getLastName(){return lasttName;}
+    public String getLastName(){return lastName;}
     public String getParentName(){return parentName;}
     public String getSchoolName(){return schoolName;}
     public String getPhoneNumber(){return phoneNumber;}
     public String getPrimaryEmail(){return primaryEmail;}
+    public String getCurriculum(){return curriculum;}
     public int getAge(){return age;}
     public String getKey(){
         return key;

@@ -20,7 +20,7 @@ import com.premiergenie.pgbbay.R;
 public class StudentEditorActivity extends AppCompatActivity {
 
     private EditText mFirstNameEditText, mLastNameEditText, mGradeEditText, mAgeEditText,
-            mSchoolNameEditText, mParentNameEditText, mPrimaryEmailEditText,mPhoneEditText;
+            mSchoolNameEditText, mParentNameEditText, mPrimaryEmailEditText,mPhoneEditText,mCurriculumEditText;
     private String mKey;
 
    private DatabaseReference mfiredatabaseRef;
@@ -42,6 +42,7 @@ public class StudentEditorActivity extends AppCompatActivity {
         mParentNameEditText = (EditText) findViewById(R.id.edit_spname);
         mPrimaryEmailEditText = (EditText) findViewById(R.id.edit_semail);
         mPhoneEditText = (EditText) findViewById(R.id.edit_sphone);
+        mCurriculumEditText = (EditText) findViewById(R.id.edit_sccurr);
 
 
 
@@ -56,6 +57,7 @@ public class StudentEditorActivity extends AppCompatActivity {
             mParentNameEditText.setText(extras.getString("parent"));
             mPrimaryEmailEditText.setText(extras.getString("email"));
             mPhoneEditText.setText(extras.getString("phone"));
+            mCurriculumEditText.setText(extras.getString("curriculum"));
             mKey = extras.getString("key");
         }
         else
@@ -88,7 +90,7 @@ public class StudentEditorActivity extends AppCompatActivity {
                 mLastNameEditText.getText().toString(),mParentNameEditText.getText().toString(),
                 mSchoolNameEditText.getText().toString(),Integer.parseInt(mGradeEditText.getText().toString()),
                 Integer.parseInt(mAgeEditText.getText().toString()), mPrimaryEmailEditText.getText().toString(),
-                mPhoneEditText.getText().toString());
+                mPhoneEditText.getText().toString(),mCurriculumEditText.getText().toString());
 
         mfiredatabaseRef.push().setValue(studentClass);
     }
@@ -103,6 +105,7 @@ public class StudentEditorActivity extends AppCompatActivity {
         mAgeEditText.setText("");
         mPrimaryEmailEditText.setText("");
         mPhoneEditText.setText("");
+        mCurriculumEditText.setText("");
     }
 
     @Override
@@ -130,7 +133,8 @@ public class StudentEditorActivity extends AppCompatActivity {
                         mLastNameEditText.getText().toString(),mParentNameEditText.getText().toString(),
                         mSchoolNameEditText.getText().toString(),Integer.parseInt(mGradeEditText.getText().toString()),
                         Integer.parseInt(mAgeEditText.getText().toString()), mPrimaryEmailEditText.getText().toString(),
-                        mPhoneEditText.getText().toString()));
+                        mPhoneEditText.getText().toString(),mCurriculumEditText.getText().toString()));
+
                 clearData();
                 Toast.makeText(this,"Student Updated",Toast.LENGTH_SHORT).show();
                 return true;

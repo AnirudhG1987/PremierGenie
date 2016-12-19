@@ -97,6 +97,24 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/container_curriculum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Curriculum"
+            android:layout_height="40dp"
+            style="@style/AttenEditorStyle" />
+        <EditText
+            android:id="@+id/edit_sccurr"
+            android:hint="Curriculum"
+            android:inputType="text"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/container_parentname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

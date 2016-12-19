@@ -7,7 +7,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -41,27 +43,6 @@ public class StudentsActivity extends AppCompatActivity {
         mstudentsList = new ArrayList<>();
 
         mfiredatabaseRef = FirebaseDatabase.getInstance().getReference("students");
-
-      /*  mfiredatabaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mstudentsList.clear();
-                for (DataSnapshot data: dataSnapshot.getChildren()) {
-
-                    StudentClass StudentClass = data.getValue(StudentClass.class);
-                    StudentClass.setKey(data.getKey());
-                    mstudentsList.add(StudentClass);
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-
-        });
-        */
 
         mfiredatabaseRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -147,12 +128,28 @@ public class StudentsActivity extends AppCompatActivity {
 
         adapter = new FirebaseRecyclerAdapter<StudentClass, StudentHolder>(
                 StudentClass.class, R.layout.student_view, StudentHolder.class, mfiredatabaseRef) {
+
+            @Override
+            public StudentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.student_view, parent, false);
+
+                return new StudentHolder(itemView);
+            }
+
+            @Override
+            public int getItemCount() {
+                return mstudentsList.size();
+            }
+
+
+
             @Override
             protected void populateViewHolder(StudentHolder v, StudentClass model, int position) {
 
                 v.sname.setText(model.getFirstName()+" "+model.getLastName());
                 v.sgrade.setText(model.getGrade());
-                v.sschool.setText(model.getSchoolName());
+                v.scurr.setText(model.getCurriculum());
             }
 
             @Override
@@ -181,7 +178,6 @@ public class StudentsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         adapter.cleanup();
-        //mfiredatabaseRef.remove;
     }
 
 
@@ -190,7 +186,7 @@ public class StudentsActivity extends AppCompatActivity {
 
         public TextView sname;
         public TextView sgrade;
-        public TextView sschool;
+        public TextView scurr;
         private StudentClass mstudent;
 
         public StudentHolder(View v) {
@@ -198,7 +194,7 @@ public class StudentsActivity extends AppCompatActivity {
 
             sname = (TextView) v.findViewById(R.id.sname);
             sgrade = (TextView) v.findViewById(R.id.sgrade);
-            sschool = (TextView) v.findViewById(R.id.sschool);
+            scurr = (TextView) v.findViewById(R.id.scurr);
 
             v.setOnClickListener(this);
         }
@@ -208,8 +204,7 @@ public class StudentsActivity extends AppCompatActivity {
             mstudent = student;
             sname.setText(mstudent.getFirstName()+" "+mstudent.getLastName());
             sgrade.setText(""+mstudent.getGrade());
-            sschool.setText(mstudent.getSchoolName());
-
+            scurr.setText(mstudent.getCurriculum());
 
         }
 
@@ -228,6 +223,7 @@ public class StudentsActivity extends AppCompatActivity {
             intent.putExtra("email", mstudent.getPrimaryEmail());
             intent.putExtra("phone", mstudent.getPhoneNumber());
             intent.putExtra("key", mstudent.getKey());
+            intent.putExtra("curriculum", mstudent.getCurriculum());
             context.startActivity(intent);
         }
     }

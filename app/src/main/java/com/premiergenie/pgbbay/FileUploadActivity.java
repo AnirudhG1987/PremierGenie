@@ -27,7 +27,6 @@ public class FileUploadActivity  extends FragmentActivity implements SearchField
 
         sNameEditTxt = (EditText) findViewById(R.id.searchSName);
 
-
         FragmentManager manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
         SearchResultFragment srf = new SearchResultFragment();
@@ -70,8 +69,6 @@ public class FileUploadActivity  extends FragmentActivity implements SearchField
         });
 
 */
-
-
 
 
     }

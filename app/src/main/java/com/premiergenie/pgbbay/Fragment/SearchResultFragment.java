@@ -153,6 +153,15 @@ public class SearchResultFragment extends Fragment {
                 AttendanceClass.class, R.layout.attendance_view, SearchResultFragment.AttendanceHolder.class, mfiredatabaseRef) {
 
             @Override
+            public AttendanceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.attendance_view, parent, false);
+
+                return new AttendanceHolder(itemView);
+            }
+
+
+            @Override
             protected void populateViewHolder(SearchResultFragment.AttendanceHolder v, AttendanceClass model, int position) {
 
                 v.acour.setText(model.getCourseName());
@@ -163,10 +172,13 @@ public class SearchResultFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(SearchResultFragment.AttendanceHolder holder, int position) {
-                if (position < mattendanceList.size()) {
                     AttendanceClass itemAttendance = mattendanceList.get(position);
                     holder.bindAttendance(itemAttendance);
-                }
+            }
+
+            @Override
+            public int getItemCount() {
+                return mattendanceList.size();
             }
         };
 

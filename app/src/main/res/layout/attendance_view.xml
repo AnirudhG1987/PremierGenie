@@ -9,7 +9,7 @@
         android:id="@+id/adate"
         style="@style/AttendanceViewStyle"
         android:layout_width="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="0.6"
         android:gravity="center"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
         android:text="Date" />

@@ -7,7 +7,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -35,7 +37,7 @@ public class AttendanceActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
 
-       mattendanceList = new ArrayList<>();
+       mattendanceList = new ArrayList<>(1);
 
         mfiredatabaseRef = FirebaseDatabase.getInstance().getReference("attendance");
 
@@ -120,6 +122,20 @@ public class AttendanceActivity extends AppCompatActivity {
 
         adapter = new FirebaseRecyclerAdapter<AttendanceClass, AttendanceHolder>(
                 AttendanceClass.class, R.layout.attendance_view, AttendanceHolder.class, mfiredatabaseRef) {
+
+            @Override
+            public AttendanceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.attendance_view, parent, false);
+
+                return new AttendanceHolder(itemView);
+            }
+
+            @Override
+            public int getItemCount() {
+                return mattendanceList.size();
+            }
+
             @Override
             protected void populateViewHolder(AttendanceHolder v, AttendanceClass model, int position) {
 
@@ -135,6 +151,8 @@ public class AttendanceActivity extends AppCompatActivity {
                 AttendanceClass itemAttendance = mattendanceList.get(position);
                 holder.bindAttendance(itemAttendance);
             }
+
+
 
         };
         mRecyclerView.setAdapter(adapter);

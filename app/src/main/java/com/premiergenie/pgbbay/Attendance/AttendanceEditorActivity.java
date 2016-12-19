@@ -115,7 +115,7 @@ public class AttendanceEditorActivity extends AppCompatActivity {
           month_x=month +1;
           day_x=day;
 
-          mDateEditText.setText(day_x + "-" + month_x + "-" + year_x);
+          mDateEditText.setText(year_x + "-" + month_x + "-" + day_x);
 
       }
 
