@@ -7,7 +7,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -142,7 +144,23 @@ public class FeeDetailsActivity extends AppCompatActivity {
     private void attachRecyclerViewAdapter() {
 
         adapter = new FirebaseRecyclerAdapter<FeeDetailsClass, FeeDetailsActivity.FeeDetailsHolder>(
-                FeeDetailsClass.class, R.layout.fee_view, FeeDetailsActivity.FeeDetailsHolder.class, mfiredatabaseRef) {
+                FeeDetailsClass.class, R.layout.activity_recycler_item, FeeDetailsActivity.FeeDetailsHolder.class, mfiredatabaseRef) {
+
+            @Override
+            public FeeDetailsActivity.FeeDetailsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.activity_recycler_item, parent, false);
+
+                return new FeeDetailsActivity.FeeDetailsHolder(itemView);
+            }
+
+            //@Override
+           // public int getItemCount() {
+                return mfeeDetailsList.size();
+            }
+
+
+
             @Override
             protected void populateViewHolder(FeeDetailsActivity.FeeDetailsHolder v, FeeDetailsClass model, int position) {
 
@@ -197,10 +215,10 @@ public class FeeDetailsActivity extends AppCompatActivity {
         public FeeDetailsHolder(View v) {
             super(v);
 
-            fname = (TextView) v.findViewById(R.id.feename);
-            fdatePaid = (TextView) v.findViewById(R.id.feedate);
-            fcour = (TextView) v.findViewById(R.id.feecourse);
-            famountPaid = (TextView) v.findViewById(R.id.feeAmount);
+            fname = (TextView) v.findViewById(R.id.text2);
+            fdatePaid = (TextView) v.findViewById(R.id.text1);
+            fcour = (TextView) v.findViewById(R.id.text3);
+            famountPaid = (TextView) v.findViewById(R.id.text4);
 
             v.setOnClickListener(this);
         }

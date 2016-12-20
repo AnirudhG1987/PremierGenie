@@ -121,20 +121,20 @@ public class AttendanceActivity extends AppCompatActivity {
     private void attachRecyclerViewAdapter() {
 
         adapter = new FirebaseRecyclerAdapter<AttendanceClass, AttendanceHolder>(
-                AttendanceClass.class, R.layout.attendance_view, AttendanceHolder.class, mfiredatabaseRef) {
+                AttendanceClass.class, R.layout.activity_recycler_item, AttendanceHolder.class, mfiredatabaseRef) {
 
             @Override
             public AttendanceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.attendance_view, parent, false);
+                        .inflate(R.layout.activity_recycler_item, parent, false);
 
                 return new AttendanceHolder(itemView);
             }
 
-            @Override
-            public int getItemCount() {
-                return mattendanceList.size();
-            }
+            //@Override
+            //public int getItemCount() {
+              //  return mattendanceList.size();
+            //}
 
             @Override
             protected void populateViewHolder(AttendanceHolder v, AttendanceClass model, int position) {
@@ -174,7 +174,6 @@ public class AttendanceActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         adapter.cleanup();
-        //mfiredatabaseRef.remove;
     }
 
 
@@ -190,10 +189,10 @@ public class AttendanceActivity extends AppCompatActivity {
         public AttendanceHolder(View v) {
             super(v);
 
-            aname = (TextView) v.findViewById(R.id.aname);
-            adate = (TextView) v.findViewById(R.id.adate);
-            ainst = (TextView) v.findViewById(R.id.ainst);
-            acour = (TextView) v.findViewById(R.id.acourse);
+            adate = (TextView) v.findViewById(R.id.text1);
+            aname = (TextView) v.findViewById(R.id.text2);
+            ainst = (TextView) v.findViewById(R.id.text4);
+            acour = (TextView) v.findViewById(R.id.text3);
 
             v.setOnClickListener(this);
         }

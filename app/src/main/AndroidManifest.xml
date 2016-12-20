@@ -38,7 +38,7 @@
             android:name=".Attendance.AttendanceEditorActivity"
             android:label="Attendance Editor" />
         <activity
-            android:name=".FileUploadActivity"
+            android:name=".DataDisplayActivity"
             android:label="FileUpload" />
 
 

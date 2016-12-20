@@ -127,20 +127,20 @@ public class StudentsActivity extends AppCompatActivity {
     private void attachRecyclerViewAdapter() {
 
         adapter = new FirebaseRecyclerAdapter<StudentClass, StudentHolder>(
-                StudentClass.class, R.layout.student_view, StudentHolder.class, mfiredatabaseRef) {
+                StudentClass.class, R.layout.activity_recycler_item, StudentHolder.class, mfiredatabaseRef) {
 
             @Override
             public StudentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.student_view, parent, false);
+                        .inflate(R.layout.activity_recycler_item, parent, false);
 
                 return new StudentHolder(itemView);
             }
 
-            @Override
-            public int getItemCount() {
-                return mstudentsList.size();
-            }
+            //@Override
+            //public int getItemCount() {
+              //  return mstudentsList.size();
+            //}
 
 
 
@@ -192,9 +192,9 @@ public class StudentsActivity extends AppCompatActivity {
         public StudentHolder(View v) {
             super(v);
 
-            sname = (TextView) v.findViewById(R.id.sname);
-            sgrade = (TextView) v.findViewById(R.id.sgrade);
-            scurr = (TextView) v.findViewById(R.id.scurr);
+            sname = (TextView) v.findViewById(R.id.text1);
+            sgrade = (TextView) v.findViewById(R.id.text2);
+            scurr = (TextView) v.findViewById(R.id.text4);
 
             v.setOnClickListener(this);
         }

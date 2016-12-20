@@ -13,7 +13,7 @@ import com.premiergenie.pgbbay.Fragment.SearchFieldFragment;
 import com.premiergenie.pgbbay.Fragment.SearchResultFragment;
 
 
-public class FileUploadActivity  extends FragmentActivity implements SearchFieldFragment.OnSubmitSelectedListener {
+public class DataDisplayActivity extends FragmentActivity implements SearchFieldFragment.OnSubmitSelectedListener {
 
 
     private EditText sNameEditTxt;
@@ -23,7 +23,7 @@ public class FileUploadActivity  extends FragmentActivity implements SearchField
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fileupload);
+        setContentView(R.layout.activity_pg_data);
 
         sNameEditTxt = (EditText) findViewById(R.id.searchSName);
 

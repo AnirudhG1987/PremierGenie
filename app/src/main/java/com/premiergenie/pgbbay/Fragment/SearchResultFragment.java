@@ -116,21 +116,21 @@ public class SearchResultFragment extends Fragment {
 
 
         // Inflate the layout for this fragment
-        View rootview = inflater.inflate(R.layout.fragment_search_result, container, false);
+        View rootview = inflater.inflate(R.layout.activity_recyclerview, container, false);
 
-        mRecyclerView = (RecyclerView) rootview.findViewById(R.id.recyclerList1);
+        mRecyclerView = (RecyclerView) rootview.findViewById(R.id.recyclerList);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         super.onCreate(savedInstanceState);
 
-        FloatingActionButton fab = (FloatingActionButton) rootview.findViewById(R.id.fab1);
+        FloatingActionButton fab = (FloatingActionButton) rootview.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-//                Intent intent = new Intent(FileUploadActivity.this, AttendanceEditorActivity.class);
+//                Intent intent = new Intent(DataDisplayActivity.this, AttendanceEditorActivity.class);
                 //               startActivity(intent);
             }
 
@@ -150,12 +150,12 @@ public class SearchResultFragment extends Fragment {
     private void attachRecyclerViewAdapter() {
 
         adapter = new FirebaseRecyclerAdapter<AttendanceClass, SearchResultFragment.AttendanceHolder>(
-                AttendanceClass.class, R.layout.attendance_view, SearchResultFragment.AttendanceHolder.class, mfiredatabaseRef) {
+                AttendanceClass.class, R.layout.activity_recycler_item, SearchResultFragment.AttendanceHolder.class, mfiredatabaseRef) {
 
             @Override
             public AttendanceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.attendance_view, parent, false);
+                        .inflate(R.layout.activity_recycler_item, parent, false);
 
                 return new AttendanceHolder(itemView);
             }
@@ -176,10 +176,10 @@ public class SearchResultFragment extends Fragment {
                     holder.bindAttendance(itemAttendance);
             }
 
-            @Override
-            public int getItemCount() {
-                return mattendanceList.size();
-            }
+            //@Override
+            //public int getItemCount() {
+               // return mattendanceList.size();
+            //}
         };
 
         mRecyclerView.setAdapter(adapter);
@@ -217,10 +217,10 @@ public class SearchResultFragment extends Fragment {
         public AttendanceHolder(View v) {
             super(v);
 
-            aname = (TextView) v.findViewById(R.id.aname);
-            adate = (TextView) v.findViewById(R.id.adate);
-            ainst = (TextView) v.findViewById(R.id.ainst);
-            acour = (TextView) v.findViewById(R.id.acourse);
+            aname = (TextView) v.findViewById(R.id.text1);
+            adate = (TextView) v.findViewById(R.id.text2);
+            ainst = (TextView) v.findViewById(R.id.text3);
+            acour = (TextView) v.findViewById(R.id.text4);
 
             v.setOnClickListener(this);
         }

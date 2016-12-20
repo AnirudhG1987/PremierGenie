@@ -63,7 +63,7 @@ public class PGBbay_DatabaseActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(v.getContext(),"Open FileUpload",Toast.LENGTH_SHORT).show();
                 // New Intent
-                Intent intent = new Intent(PGBbay_DatabaseActivity.this, FileUploadActivity.class);
+                Intent intent = new Intent(PGBbay_DatabaseActivity.this, DataDisplayActivity.class);
                 startActivity(intent);
 
             }
