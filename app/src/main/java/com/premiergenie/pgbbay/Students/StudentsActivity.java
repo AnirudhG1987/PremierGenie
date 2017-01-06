@@ -47,9 +47,9 @@ public class StudentsActivity extends AppCompatActivity {
         mfiredatabaseRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                StudentClass StudentClass = dataSnapshot.getValue(StudentClass.class);
-                StudentClass.setKey(dataSnapshot.getKey());
-                mstudentsList.add(StudentClass);
+                StudentClass studentClass = dataSnapshot.getValue(StudentClass.class);
+                studentClass.setKey(dataSnapshot.getKey());
+                mstudentsList.add(studentClass);
             }
 
             @Override
@@ -120,8 +120,6 @@ public class StudentsActivity extends AppCompatActivity {
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        //attachRecyclerViewAdapter();
-
     }
 
     private void attachRecyclerViewAdapter() {
@@ -136,13 +134,6 @@ public class StudentsActivity extends AppCompatActivity {
 
                 return new StudentHolder(itemView);
             }
-
-            //@Override
-            //public int getItemCount() {
-              //  return mstudentsList.size();
-            //}
-
-
 
             @Override
             protected void populateViewHolder(StudentHolder v, StudentClass model, int position) {
@@ -187,6 +178,7 @@ public class StudentsActivity extends AppCompatActivity {
         public TextView sname;
         public TextView sgrade;
         public TextView scurr;
+        public TextView sschool;
         private StudentClass mstudent;
 
         public StudentHolder(View v) {
@@ -195,6 +187,7 @@ public class StudentsActivity extends AppCompatActivity {
             sname = (TextView) v.findViewById(R.id.text1);
             sgrade = (TextView) v.findViewById(R.id.text2);
             scurr = (TextView) v.findViewById(R.id.text4);
+            sschool = (TextView) v.findViewById(R.id.text3);
 
             v.setOnClickListener(this);
         }
@@ -205,6 +198,7 @@ public class StudentsActivity extends AppCompatActivity {
             sname.setText(mstudent.getFirstName()+" "+mstudent.getLastName());
             sgrade.setText(""+mstudent.getGrade());
             scurr.setText(mstudent.getCurriculum());
+            sschool.setText(mstudent.getSchoolName().replaceAll("\\B.|\\P{L}", "").toUpperCase());
 
         }
 

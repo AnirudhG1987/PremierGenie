@@ -16,14 +16,17 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.premiergenie.pgbbay.R;
+import com.premiergenie.pgbbay.Students.StudentClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,20 +34,34 @@ import java.util.List;
 
 public class AttendanceEditorActivity extends AppCompatActivity {
 
-    private EditText mNameEditText;
+   // private EditText mNameEditText;
     private EditText mDateEditText;
-    private String mInstructor;
-    private String mCourse;
-    private String mKey;
+    private String mInstructor, mCourse, mStudent, mKey;
     private Spinner mInstructorSpinner;
     private Spinner mCoursesSpinner;
+    private Spinner mStudentsSpinner;
     ArrayAdapter<String> coursesSpinnerAdapter;
     ArrayAdapter<String> instructorSpinnerAdapter;
-    private List<String> mcoursesList;
+    ArrayAdapter<String> studentsSpinnerAdapter;
 
+    private List<String> mcoursesList;
+    private List<String> mstudentsList;
     private int year_x,month_x,day_x;
 
     private DatabaseReference mfiredatabaseRef;
+
+    private DatePickerDialog.OnDateSetListener dpickerListener = new DatePickerDialog.OnDateSetListener(){
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int day ){
+            year_x=year;
+            month_x=month +1;
+            day_x=day;
+
+            mDateEditText.setText(year_x + "-" + month_x + "-" + day_x);
+
+        }
+
+    };
 
    @Override
 
@@ -56,7 +73,7 @@ public class AttendanceEditorActivity extends AppCompatActivity {
        mfiredatabaseRef = FirebaseDatabase.getInstance().getReference("attendance");
 
 
-        mNameEditText = (EditText) findViewById(R.id.edit_sname);
+       // mNameEditText = (EditText) findViewById(R.id.edit_sname);
 
        final Calendar cal = Calendar.getInstance();
 
@@ -76,13 +93,16 @@ public class AttendanceEditorActivity extends AppCompatActivity {
 
        mInstructorSpinner = (Spinner) findViewById(R.id.edit_inst);
        mCoursesSpinner = (Spinner) findViewById(R.id.course_Spinner);
+       mStudentsSpinner = (Spinner) findViewById(R.id.student_Spinner);
+
+
+       setupStudentsSpinner();
        setupCourseSpinner();
        setupInstructorSpinner();
 
        Bundle extras = getIntent().getExtras();
        if (extras != null) {
            setTitle("Edit Attendance");
-           mNameEditText.setText(extras.getString("name"));
            mDateEditText.setText(extras.getString("date"));
            mKey = extras.getString("key");
        }
@@ -98,7 +118,7 @@ public class AttendanceEditorActivity extends AppCompatActivity {
         super.onDestroy();
         coursesSpinnerAdapter.clear();
         instructorSpinnerAdapter.clear();
-        //mfiredatabaseRef.remove;
+        studentsSpinnerAdapter.clear();
     }
 
 
@@ -108,63 +128,109 @@ public class AttendanceEditorActivity extends AppCompatActivity {
         return new DatePickerDialog(this, dpickerListener, year_x, month_x, day_x );
     }
 
-    private DatePickerDialog.OnDateSetListener dpickerListener = new DatePickerDialog.OnDateSetListener(){
-      @Override
-      public void onDateSet(DatePicker view, int year, int month, int day ){
-          year_x=year;
-          month_x=month +1;
-          day_x=day;
-
-          mDateEditText.setText(year_x + "-" + month_x + "-" + day_x);
-
-      }
-
-    };
 
 
-   private void setupCourseSpinner() {
 
-      FirebaseDatabase.getInstance().getReference("courses").orderByValue().addListenerForSingleValueEvent(new ValueEventListener() {
-           @Override
-           public void onDataChange(DataSnapshot dataSnapshot) {
+    private void setupStudentsSpinner() {
 
-               mcoursesList = new ArrayList<>();
 
-               for (DataSnapshot data: dataSnapshot.getChildren()) {
-                   String courseItem = data.getValue(String.class);
-                  // mcoursesList.add(courseItem);
-                   mcoursesList.add(courseItem);
-               }
-               coursesSpinnerAdapter = new ArrayAdapter<>(AttendanceEditorActivity.this,android.R.layout.simple_spinner_item, mcoursesList);
+        Query query = FirebaseDatabase.getInstance().getReference("students").orderByValue();
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-               coursesSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                mstudentsList = new ArrayList<>();
+                System.out.println(dataSnapshot.toString());
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    StudentClass studentClass = data.getValue(StudentClass.class);
+                     mstudentsList.add(studentClass.getFirstName()+" "+studentClass.getLastName());
+                }
+                studentsSpinnerAdapter = new ArrayAdapter<>(AttendanceEditorActivity.this, android.R.layout.simple_spinner_item, mstudentsList);
 
-               mCoursesSpinner.setAdapter(coursesSpinnerAdapter);
+                studentsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
-               Bundle extras = getIntent().getExtras();
-               if (extras != null) {
+                mStudentsSpinner.setAdapter(studentsSpinnerAdapter);
 
-                   // set spinner position for courses
-                   String courseName = extras.getString("course");
-                   if (!courseName.equals(null)) {
+                Bundle extras = getIntent().getExtras();
+                if (extras != null) {
+                     String studentName = extras.getString("name");
+                    if (!studentName.equals(null)) {
 
-                       int spinnerPosition = mcoursesList.indexOf(courseName);
-                       mCoursesSpinner.setSelection(spinnerPosition);
-
+                        int spinnerPosition = mstudentsList.indexOf(studentName);
+                        mStudentsSpinner.setSelection(spinnerPosition);
                    }
-
                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        mStudentsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String selection = (String) parent.getItemAtPosition(position);
+
+                if (!TextUtils.isEmpty(selection)) {
+
+                    mStudent = selection;
+                }
+
+            }
+
+            @Override
+
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                mStudent = "Other"; // Unknown
+
+            }
+
+        });
 
 
-           }
-
-           @Override
-           public void onCancelled(DatabaseError databaseError) {
-           }
-       });
+    }
 
 
+    private void setupCourseSpinner() {
 
+        FirebaseDatabase.getInstance().getReference("courses").orderByValue().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                mcoursesList = new ArrayList<>();
+
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    String courseItem = data.getValue(String.class);
+                    // mcoursesList.add(courseItem);
+                    mcoursesList.add(courseItem);
+                }
+                coursesSpinnerAdapter = new ArrayAdapter<>(AttendanceEditorActivity.this, android.R.layout.simple_spinner_item, mcoursesList);
+
+                coursesSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
+                mCoursesSpinner.setAdapter(coursesSpinnerAdapter);
+
+                Bundle extras = getIntent().getExtras();
+                if (extras != null) {
+
+                    // set spinner position for courses
+                    String courseName = extras.getString("course");
+                    if (!courseName.equals(null)) {
+                        int spinnerPosition = mcoursesList.indexOf(courseName);
+                        mCoursesSpinner.setSelection(spinnerPosition);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
         mCoursesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -172,9 +238,7 @@ public class AttendanceEditorActivity extends AppCompatActivity {
 
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                String selection = mCoursesSpinner.getSelectedItem().toString();
-
-                System.out.println("Something "+ selection);
+                String selection = (String) parent.getItemAtPosition(position);
 
                 if (!TextUtils.isEmpty(selection)) {
 
@@ -187,15 +251,14 @@ public class AttendanceEditorActivity extends AppCompatActivity {
 
             public void onNothingSelected(AdapterView<?> parent) {
 
-                System.out.println("nothing ");
-                mCourse = ""; // Unknown
+                mCourse = "Other"; // Unknown
 
             }
 
         });
 
-    }
 
+    }
 
     private void setupInstructorSpinner() {
         final List<String> instructorsList = new ArrayList<>();
@@ -273,15 +336,16 @@ public class AttendanceEditorActivity extends AppCompatActivity {
 
     private void insertData(){
 
-       AttendanceClass attendanceClass = new AttendanceClass(mDateEditText.getText().toString(),
-                mNameEditText.getText().toString(), mInstructor, mCourse  );
-
+      // AttendanceClass attendanceClass = new AttendanceClass(mDateEditText.getText().toString(),
+        //        mNameEditText.getText().toString(), mInstructor, mCourse  );
+        AttendanceClass attendanceClass = new AttendanceClass(mDateEditText.getText().toString(),
+                        mStudent, mInstructor, mCourse  );
         mfiredatabaseRef.push().setValue(attendanceClass);
     }
 
 
     private void clearData(){
-        mNameEditText.setText("");
+       // mNameEditText.setText("");
     }
 
     @Override
@@ -305,8 +369,10 @@ public class AttendanceEditorActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_udpate:
+              //  mfiredatabaseRef.child(mKey).setValue(new AttendanceClass(mDateEditText.getText().toString(),
+                     //   mNameEditText.getText().toString(), mInstructor, mCourse  ));
                 mfiredatabaseRef.child(mKey).setValue(new AttendanceClass(mDateEditText.getText().toString(),
-                        mNameEditText.getText().toString(), mInstructor, mCourse  ));
+                       mStudent, mInstructor, mCourse  ));
                 clearData();
                 Toast.makeText(this,"Attendance Updated",Toast.LENGTH_SHORT).show();
                 return true;

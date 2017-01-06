@@ -3,15 +3,36 @@ package com.premiergenie.pgbbay.Fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.premiergenie.pgbbay.R;
+import com.premiergenie.pgbbay.Students.StudentClass;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchFieldFragment extends Fragment {
+
+    private Spinner mStudentsSpinner;
+    private String mStudent;
+
+    ArrayAdapter<String> studentsSpinnerAdapter;
+
+   private List<String> mstudentsList;
+
 
     public SearchFieldFragment() {
         // Required empty public constructor
@@ -24,8 +45,6 @@ public class SearchFieldFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
         try {
             mCallback = (OnSubmitSelectedListener) activity;
         } catch (ClassCastException e) {
@@ -40,7 +59,10 @@ public class SearchFieldFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_search_field, container, false);
 
-        final EditText sNameEditText = (EditText) rootview.findViewById(R.id.searchSName);
+        mStudentsSpinner = (Spinner) rootview.findViewById(R.id.searchSName);
+
+        setupStudentsSpinner();
+
         final EditText sDateEditText = (EditText) rootview.findViewById(R.id.searchDate);
 
         Button b = (Button) rootview.findViewById(R.id.searchSubmit);
@@ -48,7 +70,7 @@ public class SearchFieldFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // New Intent
-                mCallback.onSubmitClicked(sDateEditText.getText().toString(), sNameEditText.getText().toString());
+                mCallback.onSubmitClicked(sDateEditText.getText().toString(), mStudent);
             }
         });
 
@@ -65,5 +87,65 @@ public class SearchFieldFragment extends Fragment {
     public interface OnSubmitSelectedListener{
         void onSubmitClicked(String d, String s);
     }
+
+    public interface OnClearSelectedListener{
+        void onClearClicked();
+    }
+
+    private void setupStudentsSpinner() {
+
+
+        Query query = FirebaseDatabase.getInstance().getReference("students").orderByValue();
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                mstudentsList = new ArrayList<>();
+                System.out.println(dataSnapshot.toString());
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    StudentClass studentClass = data.getValue(StudentClass.class);
+                    mstudentsList.add(studentClass.getFirstName()+" "+studentClass.getLastName());
+                }
+                studentsSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, mstudentsList);
+
+                studentsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
+                mStudentsSpinner.setAdapter(studentsSpinnerAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        mStudentsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String selection = (String) parent.getItemAtPosition(position);
+
+                if (!TextUtils.isEmpty(selection)) {
+
+                    mStudent = selection;
+                }
+
+            }
+
+            @Override
+
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                mStudent = "Other"; // Unknown
+
+            }
+
+        });
+
+
+    }
+
+
 
 }

@@ -4,12 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -19,37 +20,64 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.premiergenie.pgbbay.DividerItemDecoration;
 import com.premiergenie.pgbbay.R;
 
 import java.util.ArrayList;
 
 
-public class AttendanceActivity extends AppCompatActivity {
+public class AttendanceFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private ArrayList<AttendanceClass> mattendanceList;
 
-    private FirebaseRecyclerAdapter<AttendanceClass, AttendanceHolder> adapter;
+    private FirebaseRecyclerAdapter<AttendanceClass, AttendanceFragment.AttendanceHolder> adapter;
 
     private DatabaseReference mfiredatabaseRef;
 
-    protected void onCreate(Bundle savedInstanceState) {
+    private ProgressBar spinner;
 
-       mattendanceList = new ArrayList<>(1);
+
+   public AttendanceFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        // Inflate the layout for this fragment
+        View rootview = inflater.inflate(R.layout.activity_recyclerview, container, false);
+
+        mattendanceList = new ArrayList<>();
 
         mfiredatabaseRef = FirebaseDatabase.getInstance().getReference("attendance");
 
-        Query latestAttendance = mfiredatabaseRef.orderByChild("studentName");
-        //mfiredatabaseRef.addChildEventListener(new ChildEventListener() {
+        spinner=(ProgressBar)rootview.findViewById(R.id.progressBar);
+        spinner.setVisibility(View.VISIBLE);
+
+        String sName = "", date = "";
+        if(getArguments()!=null) {
+             sName = getArguments().getString("sName");
+             date = getArguments().getString("date");
+        }
+
+        Query latestAttendance;
+        if(sName!=null) {
+            latestAttendance = mfiredatabaseRef.orderByChild("studentName").equalTo(sName);
+        }
+        else {
+            latestAttendance = mfiredatabaseRef;
+        }
+
         latestAttendance.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 AttendanceClass attendanceClass = dataSnapshot.getValue(AttendanceClass.class);
                 attendanceClass.setKey(dataSnapshot.getKey());
                 mattendanceList.add(attendanceClass);
-                  }
+                spinner.setVisibility(View.GONE);
+            }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -64,7 +92,7 @@ public class AttendanceActivity extends AppCompatActivity {
                     }
                 }
                 mattendanceList.set(i,attendanceClass);
-                 }
+            }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -78,7 +106,7 @@ public class AttendanceActivity extends AppCompatActivity {
                     }
                 }
                 mattendanceList.remove(i);
-              }
+            }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
@@ -91,37 +119,44 @@ public class AttendanceActivity extends AppCompatActivity {
             }
         });
 
+
+
+
+
+        mRecyclerView = (RecyclerView) rootview.findViewById(R.id.recyclerList);
+        mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_recyclerview);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) rootview.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(AttendanceActivity.this, AttendanceEditorActivity.class);
+                Intent intent = new Intent(getActivity(), AttendanceEditorActivity.class);
                 startActivity(intent);
             }
 
         });
 
+        if(adapter!=null) {
+            adapter.cleanup();
+        }
+        attachRecyclerViewAdapter();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerList);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(
-                getApplicationContext()
-        ));
-
-         mLinearLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        return rootview;
 
     }
 
+
+
+
     private void attachRecyclerViewAdapter() {
 
-        adapter = new FirebaseRecyclerAdapter<AttendanceClass, AttendanceHolder>(
-                AttendanceClass.class, R.layout.activity_recycler_item, AttendanceHolder.class, mfiredatabaseRef) {
+        adapter = new FirebaseRecyclerAdapter<AttendanceClass, AttendanceFragment.AttendanceHolder>(
+                AttendanceClass.class, R.layout.activity_recycler_item, AttendanceFragment.AttendanceHolder.class, mfiredatabaseRef) {
 
             @Override
             public AttendanceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -131,49 +166,40 @@ public class AttendanceActivity extends AppCompatActivity {
                 return new AttendanceHolder(itemView);
             }
 
-            //@Override
-            //public int getItemCount() {
-              //  return mattendanceList.size();
-            //}
 
             @Override
-            protected void populateViewHolder(AttendanceHolder v, AttendanceClass model, int position) {
+            protected void populateViewHolder(AttendanceFragment.AttendanceHolder v, AttendanceClass model, int position) {
 
                 v.acour.setText(model.getCourseName());
                 v.ainst.setText(model.getInstructorName());
                 v.adate.setText(model.getDate());
                 v.aname.setText(model.getStudentName());
-
             }
 
             @Override
-            public void onBindViewHolder(AttendanceHolder holder, int position) {
-                AttendanceClass itemAttendance = mattendanceList.get(position);
-                holder.bindAttendance(itemAttendance);
+            public void onBindViewHolder(AttendanceFragment.AttendanceHolder holder, int position) {
+                    AttendanceClass itemAttendance = mattendanceList.get(position);
+                    holder.bindAttendance(itemAttendance);
             }
 
-
-
+            @Override
+            public int getItemCount() {
+               return mattendanceList.size();
+            }
         };
+
         mRecyclerView.setAdapter(adapter);
+
+
     }
 
 
     @Override
-    protected void onStart(){
+    public void onDestroy() {
+        super.onDestroy();
         if(adapter!=null) {
             adapter.cleanup();
         }
-        attachRecyclerViewAdapter();
-        super.onStart();
-
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        adapter.cleanup();
     }
 
 
@@ -191,8 +217,8 @@ public class AttendanceActivity extends AppCompatActivity {
 
             adate = (TextView) v.findViewById(R.id.text1);
             aname = (TextView) v.findViewById(R.id.text2);
-            ainst = (TextView) v.findViewById(R.id.text4);
             acour = (TextView) v.findViewById(R.id.text3);
+            ainst = (TextView) v.findViewById(R.id.text4);
 
             v.setOnClickListener(this);
         }
@@ -222,8 +248,4 @@ public class AttendanceActivity extends AppCompatActivity {
         }
     }
 
-
 }
-
-
-

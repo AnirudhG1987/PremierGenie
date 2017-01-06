@@ -34,14 +34,15 @@
         android:orientation="horizontal">
 
         <TextView
-            android:text="Student"
+            android:text="Expense Detail"
             android:id="@+id/stuexptxtview"
             android:layout_height="40dp"
             style="@style/AttenEditorStyle" />
-        <Spinner
-            android:id="@+id/student_Spinner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <EditText
+            android:id="@+id/edit_fsname"
+            android:hint="Expense Detail"
+            android:inputType="text"
+            style="@style/EditorFieldStyle"/>
     </LinearLayout>
 
 
@@ -51,7 +52,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:text="Course"
+            android:text="Expense Type"
             android:id="@+id/courexptxtview"
             android:layout_height="40dp"
             style="@style/AttenEditorStyle" />

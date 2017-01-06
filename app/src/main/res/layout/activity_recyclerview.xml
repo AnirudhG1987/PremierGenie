@@ -28,4 +28,15 @@
         android:src="@drawable/ic_add_black_24dp"
         />
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:layout_centerHorizontal="true"
+        android:foregroundGravity="center"
+        android:layout_alignTop="@+id/recyclerList"/>
+
 </RelativeLayout>

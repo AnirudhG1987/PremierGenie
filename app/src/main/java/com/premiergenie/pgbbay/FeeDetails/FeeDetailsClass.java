@@ -15,7 +15,7 @@ public class FeeDetailsClass {
 
     public FeeDetailsClass(){}
 
-    public FeeDetailsClass( String date, String studentName, String courseName, int amountPaid){
+    public FeeDetailsClass(String date, String studentName, String courseName, int amountPaid){
 
         this.datePaid = date;
         this.studentName = studentName;
@@ -23,7 +23,7 @@ public class FeeDetailsClass {
         this.amountPaid = amountPaid;
     }
 
-    public FeeDetailsClass( String date, String studentName, String courseName, String monthGiven, int amountPaid){
+    public FeeDetailsClass(String date, String studentName, String courseName, String monthGiven, int amountPaid){
 
         this.datePaid = date;
         this.studentName = studentName;

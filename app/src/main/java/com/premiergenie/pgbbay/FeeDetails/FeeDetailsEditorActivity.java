@@ -3,9 +3,9 @@ package com.premiergenie.pgbbay.FeeDetails;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.icu.util.Calendar;
+import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,26 +21,42 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.premiergenie.pgbbay.Attendance.AttendanceEditorActivity;
 import com.premiergenie.pgbbay.R;
+import com.premiergenie.pgbbay.Students.StudentClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FeeDetailsEditorActivity extends AppCompatActivity {
 
-    private EditText mNameEditText;
     private EditText mDateEditText;
     private EditText mAmountPaidEditText;
-    private String mCourse;
+    private String mCourse, mStudent;
     private String mKey;
-    private Spinner mCoursesSpinner;
-    ArrayAdapter<String> coursesSpinnerAdapter;
-    private List<String> mcoursesList;
+    private Spinner mCoursesSpinner, mStudentsSpinner;
+    ArrayAdapter<String> coursesSpinnerAdapter, studentsSpinnerAdapter;
+    private List<String> mcoursesList, mstudentsList;
 
     private int year_x,month_x,day_x;
 
     private DatabaseReference mfiredatabaseRef;
+
+    private DatePickerDialog.OnDateSetListener dpickerListener = new DatePickerDialog.OnDateSetListener(){
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int day ){
+            year_x=year;
+            month_x=month +1;
+            day_x=day;
+
+            mDateEditText.setText(year_x + "-" + month_x + "-" + day_x );
+
+        }
+
+    };
+
 
     @Override
 
@@ -49,10 +65,9 @@ public class FeeDetailsEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fee_details_editor);
 
+        String sName = "", date = "";
+
         mfiredatabaseRef = FirebaseDatabase.getInstance().getReference("feeDetails");
-
-
-        mNameEditText = (EditText) findViewById(R.id.edit_fsname);
 
         final Calendar cal = Calendar.getInstance();
 
@@ -70,16 +85,20 @@ public class FeeDetailsEditorActivity extends AppCompatActivity {
             }
         });
 
+        mCoursesSpinner = (Spinner) findViewById(R.id.fee_Spinner);
 
-
-
-         mCoursesSpinner = (Spinner) findViewById(R.id.fee_Spinner);
         setupCourseSpinner();
+
+        mStudentsSpinner = (Spinner) findViewById(R.id.student_Spinner);
+
+
+        setupStudentsSpinner();
+
+
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             setTitle("Edit Fee Detail");
-            mNameEditText.setText(extras.getString("name"));
             mDateEditText.setText(extras.getString("datePaid"));
             mAmountPaidEditText.setText(String.format("%d",extras.getInt("amountPaid")));
             mKey = extras.getString("key");
@@ -97,18 +116,71 @@ public class FeeDetailsEditorActivity extends AppCompatActivity {
         return new DatePickerDialog(this, dpickerListener, year_x, month_x, day_x );
     }
 
-    private DatePickerDialog.OnDateSetListener dpickerListener = new DatePickerDialog.OnDateSetListener(){
-        @Override
-        public void onDateSet(DatePicker view, int year, int month, int day ){
-            year_x=year;
-            month_x=month +1;
-            day_x=day;
 
-            mDateEditText.setText(day_x+"-"+month_x+"-"+year_x);
 
-        }
+    private void setupStudentsSpinner() {
 
-    };
+        Query query = FirebaseDatabase.getInstance().getReference("students").orderByValue();
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                mstudentsList = new ArrayList<>();
+                System.out.println(dataSnapshot.toString());
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    StudentClass studentClass = data.getValue(StudentClass.class);
+                    mstudentsList.add(studentClass.getFirstName()+" "+studentClass.getLastName());
+                }
+                studentsSpinnerAdapter = new ArrayAdapter<>(FeeDetailsEditorActivity.this, android.R.layout.simple_spinner_item, mstudentsList);
+
+                studentsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
+                mStudentsSpinner.setAdapter(studentsSpinnerAdapter);
+
+                Bundle extras = getIntent().getExtras();
+                if (extras != null) {
+                    String studentName = extras.getString("name");
+                    if (studentName!=null) {
+
+                        int spinnerPosition = mstudentsList.indexOf(studentName);
+                        mStudentsSpinner.setSelection(spinnerPosition);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        mStudentsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String selection = (String) parent.getItemAtPosition(position);
+
+                if (!TextUtils.isEmpty(selection)) {
+
+                    mStudent = selection;
+                }
+
+            }
+
+            @Override
+
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                mStudent = "Other"; // Unknown
+
+            }
+
+        });
+
+
+    }
+
 
     private void setupCourseSpinner() {
 
@@ -120,7 +192,6 @@ public class FeeDetailsEditorActivity extends AppCompatActivity {
 
                 for (DataSnapshot data: dataSnapshot.getChildren()) {
                     String courseItem = data.getValue(String.class);
-                    // mcoursesList.add(courseItem);
                     mcoursesList.add(courseItem);
                 }
 
@@ -132,19 +203,13 @@ public class FeeDetailsEditorActivity extends AppCompatActivity {
 
                 Bundle extras = getIntent().getExtras();
                 if (extras != null) {
-
-                    // set spinner position for courses
                     String courseName = extras.getString("course");
-                    if (!courseName.equals(null)) {
-
+                    if (courseName!=null) {
                         int spinnerPosition = mcoursesList.indexOf(courseName);
                         mCoursesSpinner.setSelection(spinnerPosition);
-
                     }
 
                 }
-
-
             }
 
             @Override
@@ -193,17 +258,13 @@ public class FeeDetailsEditorActivity extends AppCompatActivity {
     private void insertData(){
 
         FeeDetailsClass feeDetailsClass = new FeeDetailsClass(mDateEditText.getText().toString(),
-                mNameEditText.getText().toString(), mCourse, Integer.parseInt(mAmountPaidEditText.getText().toString() ) );
+                mStudent, mCourse, Integer.parseInt(mAmountPaidEditText.getText().toString() ) );
 
         mfiredatabaseRef.push().setValue(feeDetailsClass);
     }
 
 
     private void clearData(){
-        mNameEditText.setText("");
-        mDateEditText.setText("");
-        // set spinner position for courses
-        mCoursesSpinner.setSelection(0);
         mAmountPaidEditText.setText("");
     }
 
@@ -229,9 +290,9 @@ public class FeeDetailsEditorActivity extends AppCompatActivity {
 
             case R.id.action_udpate:
                 mfiredatabaseRef.child(mKey).setValue(new FeeDetailsClass(mDateEditText.getText().toString(),
-                        mNameEditText.getText().toString(), mCourse, Integer.parseInt(mAmountPaidEditText.getText().toString() ) ));
+                        mStudent, mCourse, Integer.parseInt(mAmountPaidEditText.getText().toString() ) ));
                 clearData();
-                Toast.makeText(this,"Fee Detail Updated",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Fee Detail Updated",Toast.LENGTH_SHORT).show();
                 return true;
 
             case android.R.id.home:

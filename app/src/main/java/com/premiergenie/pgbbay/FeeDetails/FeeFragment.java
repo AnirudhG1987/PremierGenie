@@ -4,12 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -18,56 +19,70 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.premiergenie.pgbbay.DividerItemDecoration;
+import com.google.firebase.database.Query;
 import com.premiergenie.pgbbay.R;
 
 import java.util.ArrayList;
 
-public class FeeDetailsActivity extends AppCompatActivity {
+public class FeeFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private ArrayList<FeeDetailsClass> mfeeDetailsList;
 
-    private FirebaseRecyclerAdapter<FeeDetailsClass, FeeDetailsActivity.FeeDetailsHolder> adapter;
+    private FirebaseRecyclerAdapter<FeeDetailsClass, FeeFragment.FeeDetailsHolder> adapter;
 
     private DatabaseReference mfiredatabaseRef;
 
-    private static final int URL_LOADER = 0;
+    private ProgressBar spinner;
 
-    protected void onCreate(Bundle savedInstanceState) {
+    private String caller;
+
+    private Double expFeeCounter=0.0;
+
+    public FeeFragment(){}
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+
+        View rootview = inflater.inflate(R.layout.activity_recyclerview, container, false);
 
         mfeeDetailsList = new ArrayList<>();
 
-        mfiredatabaseRef = FirebaseDatabase.getInstance().getReference("feeDetails");
+        String sName = "", date = "";
+        if(getArguments()!=null) {
+            sName = getArguments().getString("sName");
+            date = getArguments().getString("date");
+        }
 
-      /*  mfiredatabaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mfeeDetailsList.clear();
-                for (DataSnapshot data: dataSnapshot.getChildren()) {
+         mfiredatabaseRef = FirebaseDatabase.getInstance().getReference("feeDetails");
 
-                    FeeDetailsClass feeDetailsClass = data.getValue(FeeDetailsClass.class);
-                    feeDetailsClass.setKey(data.getKey());
-                    mfeeDetailsList.add(feeDetailsClass);
 
-                }
-            }
+        spinner=(ProgressBar)rootview.findViewById(R.id.progressBar);
+        spinner.setVisibility(View.VISIBLE);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
 
-        });
-        */
 
-        mfiredatabaseRef.addChildEventListener(new ChildEventListener() {
+        Query latestAttendance;
+        if(sName!=null) {
+            latestAttendance = mfiredatabaseRef.orderByChild("studentName").equalTo(sName);
+        }
+        else {
+            latestAttendance = mfiredatabaseRef;
+        }
+
+
+
+        latestAttendance.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 FeeDetailsClass feeDetailsClass = dataSnapshot.getValue(FeeDetailsClass.class);
                 feeDetailsClass.setKey(dataSnapshot.getKey());
                 mfeeDetailsList.add(feeDetailsClass);
+                expFeeCounter += feeDetailsClass.getAmountPaid();
+                spinner.setVisibility(View.GONE);
             }
 
             @Override
@@ -82,7 +97,6 @@ public class FeeDetailsActivity extends AppCompatActivity {
                         break;
                     }
                 }
-                // System.out.println("THis is the index "+i);
                 mfeeDetailsList.set(i,feeDetailsClass);
             }
 
@@ -114,55 +128,50 @@ public class FeeDetailsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_recyclerview);
-        //setContentView(R.layout.activity_fee__details);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabFeeDetails);
+        FloatingActionButton fab = (FloatingActionButton) rootview.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(FeeDetailsActivity.this, FeeDetailsEditorActivity.class);
+                Intent intent = new Intent(getActivity(), FeeDetailsEditorActivity.class);
+                intent.putExtra("caller",caller);
                 startActivity(intent);
             }
 
         });
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerList);
-        //mRecyclerView = (RecyclerView) findViewById(R.id.feeDetailsList);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(
-                getApplicationContext()
-        ));
+        mRecyclerView = (RecyclerView) rootview.findViewById(R.id.recyclerList);
 
-        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        if(adapter!=null) {
+            adapter.cleanup();
+        }
+        attachRecyclerViewAdapter();
 
+        return rootview;
 
     }
 
+
+
+
     private void attachRecyclerViewAdapter() {
 
-        adapter = new FirebaseRecyclerAdapter<FeeDetailsClass, FeeDetailsActivity.FeeDetailsHolder>(
-                FeeDetailsClass.class, R.layout.activity_recycler_item, FeeDetailsActivity.FeeDetailsHolder.class, mfiredatabaseRef) {
+        adapter = new FirebaseRecyclerAdapter<FeeDetailsClass, FeeFragment.FeeDetailsHolder>(
+                FeeDetailsClass.class, R.layout.activity_recycler_item, FeeFragment.FeeDetailsHolder.class, mfiredatabaseRef) {
 
             @Override
-            public FeeDetailsActivity.FeeDetailsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            public FeeFragment.FeeDetailsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.activity_recycler_item, parent, false);
 
-                return new FeeDetailsActivity.FeeDetailsHolder(itemView);
+                return new FeeFragment.FeeDetailsHolder(itemView);
             }
-
-            //@Override
-           // public int getItemCount() {
-                return mfeeDetailsList.size();
-            }
-
-
 
             @Override
-            protected void populateViewHolder(FeeDetailsActivity.FeeDetailsHolder v, FeeDetailsClass model, int position) {
+            protected void populateViewHolder(FeeFragment.FeeDetailsHolder v, FeeDetailsClass model, int position) {
 
                 v.fcour.setText(model.getCourseName());
                 v.famountPaid.setText(model.getAmountPaid());
@@ -172,9 +181,14 @@ public class FeeDetailsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onBindViewHolder(FeeDetailsActivity.FeeDetailsHolder holder, int position) {
+            public void onBindViewHolder(FeeFragment.FeeDetailsHolder holder, int position) {
                 FeeDetailsClass itemFeeDetails = mfeeDetailsList.get(position);
                 holder.bindAttendance(itemFeeDetails);
+            }
+
+            @Override
+            public int getItemCount() {
+                return mfeeDetailsList.size();
             }
 
         };
@@ -183,21 +197,11 @@ public class FeeDetailsActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onStart(){
+    public void onDestroy() {
+        super.onDestroy();
         if(adapter!=null) {
             adapter.cleanup();
         }
-        attachRecyclerViewAdapter();
-        super.onStart();
-
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        adapter.cleanup();
-        //mfiredatabaseRef.remove;
     }
 
 

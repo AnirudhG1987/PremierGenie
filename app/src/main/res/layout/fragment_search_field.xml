@@ -3,46 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
+    android:orientation="vertical"
     android:focusableInTouchMode="true"
     android:background="@drawable/border"
     tools:context="com.premiergenie.pgbbay.Fragment.SearchFieldFragment">
 
-    <EditText
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <Spinner
         android:id="@+id/searchSName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Student"
-        android:maxLines="1"
-        android:imeActionLabel="Done"
-        android:imeOptions="actionDone"
-        android:layout_weight="1"/>
+        android:layout_weight="2"/>
 
     <EditText
         android:id="@+id/searchDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Date"
-        android:layout_weight="1"/>
+        android:layout_weight="2"/>
+    </LinearLayout>
 
-    <EditText
-        android:id="@+id/searchSubject"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Subject"
-        android:layout_weight="1"/>
-
-    <EditText
-        android:id="@+id/searchInst"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Instructor"
-        android:layout_weight="1"/>
-
+        android:orientation="horizontal">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
         android:id="@+id/searchSubmit"
-        android:layout_weight="1"/>
+        android:layout_weight="0.5"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:id="@+id/clearButton"
+        android:layout_weight="0.5"/>
+    </LinearLayout>
 </LinearLayout>

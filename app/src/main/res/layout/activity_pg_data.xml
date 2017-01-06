@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_search_field" />
 
     <FrameLayout
-        class="com.premiergenie.pgbbay.Fragment.SearchResultFragment"
+        class="com.premiergenie.pgbbay.Attendance.AttendanceFragment"
         android:id="@+id/result_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

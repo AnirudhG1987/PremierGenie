@@ -7,16 +7,19 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
+import com.premiergenie.pgbbay.Attendance.AttendanceFragment;
+import com.premiergenie.pgbbay.Expenses.ExpenseFragment;
+import com.premiergenie.pgbbay.FeeDetails.FeeFragment;
 import com.premiergenie.pgbbay.Fragment.SearchFieldFragment;
-import com.premiergenie.pgbbay.Fragment.SearchResultFragment;
 
 
-public class DataDisplayActivity extends FragmentActivity implements SearchFieldFragment.OnSubmitSelectedListener {
+public class DataDisplayActivity extends FragmentActivity
+        implements SearchFieldFragment.OnSubmitSelectedListener,
+        SearchFieldFragment.OnClearSelectedListener {
 
 
-    private EditText sNameEditTxt;
+    private String caller;
 
     private android.support.v4.app.FragmentTransaction transaction;
 
@@ -25,86 +28,77 @@ public class DataDisplayActivity extends FragmentActivity implements SearchField
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pg_data);
 
-        sNameEditTxt = (EditText) findViewById(R.id.searchSName);
+      caller = getIntent().getStringExtra("caller");
 
+        setupFragment();
+
+
+    }
+
+    private Fragment setupFragment() {
         FragmentManager manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
-        SearchResultFragment srf = new SearchResultFragment();
-        transaction.add(R.id.result_fragment,srf,"Result_Frag");
+
+        Fragment fragment;
+
+        switch (caller) {
+            case "Attendance":
+                fragment = new AttendanceFragment();
+                break;
+            case "Expenses":
+                fragment = new ExpenseFragment();
+                break;
+            case "Fee":
+                fragment = new FeeFragment();
+                break;
+            default:
+                fragment = new AttendanceFragment();
+        }
+
+        Bundle b = new Bundle();
+        b.putString("caller", caller);
+        fragment.setArguments(b);
+        transaction.add(R.id.result_fragment, fragment, "Result_Frag");
         transaction.commit();
-
-         /*
-
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://premier-genie.appspot.com");
-        StorageReference worksheetRef = storageRef.child("Worksheet");
-
-        final StorageReference testRef = storageRef.child("Worksheet/Physics Term 2 Test.pdf");
-
-        Button download = (Button)findViewById(R.id.download);
-
-        download.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v)  {
-
-                testRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener() {
-                    @Override
-                    public void onSuccess(Object o) {
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                    }
-                });
-
-/*
-
-                Uri file = Uri.fromFile(new File("path/to/folderName/file.jpg"));
-                UploadTask uploadTask = testRef.putFile(file);
-
-            }
-
-        });
-
-*/
-
-
+        return fragment;
     }
 
 
     @Override
     public void onSubmitClicked(String date, String studentName) {
-       /* Fragment srf = null;
-        srf = getSupportFragmentManager().findFragmentByTag("Your_Fragment_TAG");
-        final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.detach(frg);
-        ft.attach(frg);
-        ft.commit();
-        */
 
-        sNameEditTxt.setText("");
-        sNameEditTxt.clearFocus();
+        fragmentReresher();
+        Fragment fragment = setupFragment();
+        Bundle b = new Bundle();
+        b.putString("sName", studentName);
+        fragment.setArguments(b);
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.result_fragment, fragment).commit();
+
+    }
+
+    @Override
+    public void onClearClicked() {
+        fragmentReresher();
+        Fragment fragment = setupFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.result_fragment, fragment).commit();
+
+    }
+
+    private void fragmentReresher() {
         View view = this.getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.result_fragment);
-        if (f!=null) {
+        if (f != null) {
             getSupportFragmentManager().beginTransaction().
                     remove(f).commit();
         }
-
-        SearchResultFragment srf = new SearchResultFragment();
-        Bundle b = new Bundle();
-        b.putString("sName",studentName);
-        srf.setArguments(b);
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.result_fragment, srf).commit();
-
     }
+
 }
+
+

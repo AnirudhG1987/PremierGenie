@@ -5,10 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.premiergenie.pgbbay.Attendance.AttendanceActivity;
-import com.premiergenie.pgbbay.FeeDetails.FeeDetailsActivity;
 import com.premiergenie.pgbbay.Students.StudentsActivity;
 
 public class PGBbay_DatabaseActivity extends AppCompatActivity {
@@ -22,48 +19,54 @@ public class PGBbay_DatabaseActivity extends AppCompatActivity {
         students.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(),"Open list of StudentsActivity",Toast.LENGTH_SHORT).show();
-                // New Intent
-                Intent intent = new Intent(PGBbay_DatabaseActivity.this, StudentsActivity.class);
+                 Intent intent = new Intent(PGBbay_DatabaseActivity.this, StudentsActivity.class);
+                intent.putExtra("caller", "Student");
                 startActivity(intent);
 
             }
         });
-
-
-        TextView fee = (TextView)findViewById(R.id.Fee_Details);
-        fee.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(),"Open list of Fee Details",Toast.LENGTH_SHORT).show();
-                // New Intent
-                Intent intent = new Intent(PGBbay_DatabaseActivity.this, FeeDetailsActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
 
 
         TextView attendance = (TextView)findViewById(R.id.Attendance);
         attendance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(),"Open Attendance",Toast.LENGTH_SHORT).show();
-                // New Intent
-                Intent intent = new Intent(PGBbay_DatabaseActivity.this, AttendanceActivity.class);
+                Intent intent = new Intent(PGBbay_DatabaseActivity.this, DataDisplayActivity.class);
+                intent.putExtra("caller", "Attendance");
                 startActivity(intent);
 
             }
         });
 
-        TextView fileUpload = (TextView)findViewById(R.id.FileUpload);
-        fileUpload.setOnClickListener(new View.OnClickListener() {
+        TextView fee = (TextView)findViewById(R.id.Fee_Details);
+        fee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(),"Open FileUpload",Toast.LENGTH_SHORT).show();
-                // New Intent
                 Intent intent = new Intent(PGBbay_DatabaseActivity.this, DataDisplayActivity.class);
+                intent.putExtra("caller", "Fee");
+                startActivity(intent);
+
+            }
+        });
+
+        TextView exp = (TextView)findViewById(R.id.Expenses);
+        exp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PGBbay_DatabaseActivity.this, DataDisplayActivity.class);
+                intent.putExtra("caller", "Expenses");
+                startActivity(intent);
+
+            }
+        });
+
+
+        TextView toDO = (TextView)findViewById(R.id.TODO);
+        toDO.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                  Intent intent = new Intent(PGBbay_DatabaseActivity.this, DataDisplayActivity.class);
+                intent.putExtra("caller", "TODO");
                 startActivity(intent);
 
             }

@@ -16,14 +16,13 @@
         />
 
     <TextView
-        android:id="@+id/Courses"
-        android:text="Courses"
+        android:id="@+id/Attendance"
+        android:text="Attendance"
         style="@style/CategoryStyle"
-        android:background="@color/category_courses"
-        android:onClick="onCoursesClick"
+        android:background="@color/category_expense"
+        android:onClick="onAttendanceClick"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        />
+        android:layout_weight="1"/>
 
     <TextView
         android:id="@+id/Fee_Details"
@@ -35,17 +34,18 @@
         android:layout_weight="1"/>
 
     <TextView
-        android:id="@+id/Attendance"
-        android:text="Attendance"
+        android:id="@+id/Expenses"
+        android:text="Expenses"
         style="@style/CategoryStyle"
-        android:background="@color/category_expense"
-        android:onClick="onAttendanceClick"
+        android:background="@color/category_courses"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        />
+
 
     <TextView
-        android:id="@+id/FileUpload"
-        android:text="File Upload"
+        android:id="@+id/TODO"
+        android:text="TODO"
         style="@style/CategoryStyle"
         android:layout_height="0dp"
         android:layout_weight="1"
