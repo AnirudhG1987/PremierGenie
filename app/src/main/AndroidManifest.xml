@@ -51,6 +51,9 @@
             android:name=".FeeDetails.FeeDetailsEditorActivity"
             android:label="Fee Editor" />
 
+        <activity
+            android:name=".TODO.TODOActivity"
+            android:label="TODO" />
 
         <activity
             android:name=".Students.StudentsActivity"

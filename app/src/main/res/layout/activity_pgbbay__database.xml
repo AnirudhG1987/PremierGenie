@@ -14,6 +14,14 @@
         android:layout_weight="1"
         android:background="@color/category_students"
         />
+    <TextView
+        android:id="@+id/RegStudents"
+        android:text="Regsitered Students"
+        style="@style/CategoryStyle"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/category_courses"
+        />
 
     <TextView
         android:id="@+id/Attendance"

@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.premiergenie.pgbbay.DataPopulator;
 import com.premiergenie.pgbbay.R;
 import com.premiergenie.pgbbay.Students.StudentClass;
 
@@ -116,7 +117,7 @@ public class AttendanceEditorActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        coursesSpinnerAdapter.clear();
+     //   coursesSpinnerAdapter.clear();
         instructorSpinnerAdapter.clear();
         studentsSpinnerAdapter.clear();
     }
@@ -134,7 +135,7 @@ public class AttendanceEditorActivity extends AppCompatActivity {
     private void setupStudentsSpinner() {
 
 
-        Query query = FirebaseDatabase.getInstance().getReference("students").orderByValue();
+        Query query = FirebaseDatabase.getInstance().getReference("students").orderByChild("firstName");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -198,6 +199,9 @@ public class AttendanceEditorActivity extends AppCompatActivity {
 
     private void setupCourseSpinner() {
 
+        //DataPopulator.populateCoursesSpinner(mCoursesSpinner,getApplicationContext());
+
+
         FirebaseDatabase.getInstance().getReference("courses").orderByValue().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -206,7 +210,6 @@ public class AttendanceEditorActivity extends AppCompatActivity {
 
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     String courseItem = data.getValue(String.class);
-                    // mcoursesList.add(courseItem);
                     mcoursesList.add(courseItem);
                 }
                 coursesSpinnerAdapter = new ArrayAdapter<>(AttendanceEditorActivity.this, android.R.layout.simple_spinner_item, mcoursesList);
@@ -232,10 +235,11 @@ public class AttendanceEditorActivity extends AppCompatActivity {
             }
         });
 
+//        mcoursesList = DataPopulator.getInstance().mcoursesList;
+
         mCoursesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 String selection = (String) parent.getItemAtPosition(position);
@@ -248,15 +252,11 @@ public class AttendanceEditorActivity extends AppCompatActivity {
             }
 
             @Override
-
             public void onNothingSelected(AdapterView<?> parent) {
-
                 mCourse = "Other"; // Unknown
-
             }
 
         });
-
 
     }
 

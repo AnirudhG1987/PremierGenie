@@ -13,10 +13,14 @@ import com.premiergenie.pgbbay.Expenses.ExpenseFragment;
 import com.premiergenie.pgbbay.FeeDetails.FeeFragment;
 import com.premiergenie.pgbbay.Fragment.SearchFieldFragment;
 
+import java.text.DecimalFormat;
+
 
 public class DataDisplayActivity extends FragmentActivity
         implements SearchFieldFragment.OnSubmitSelectedListener,
-        SearchFieldFragment.OnClearSelectedListener {
+        SearchFieldFragment.OnClearSelectedListener,
+        FeeFragment.OnDataUpdatedListener
+{
 
 
     private String caller;
@@ -65,20 +69,20 @@ public class DataDisplayActivity extends FragmentActivity
 
 
     @Override
-    public void onSubmitClicked(String date, String studentName) {
+    public void onSubmitClicked(String studentName) {
 
         fragmentReresher();
         Fragment fragment = setupFragment();
         Bundle b = new Bundle();
         b.putString("sName", studentName);
         fragment.setArguments(b);
-
         getSupportFragmentManager().beginTransaction().replace(R.id.result_fragment, fragment).commit();
 
     }
 
     @Override
     public void onClearClicked() {
+
         fragmentReresher();
         Fragment fragment = setupFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.result_fragment, fragment).commit();
@@ -99,6 +103,16 @@ public class DataDisplayActivity extends FragmentActivity
         }
     }
 
+    @Override
+    public void onDataUpdated(double d) {
+        SearchFieldFragment articleFrag = (SearchFieldFragment)
+                getSupportFragmentManager().findFragmentById(R.id.search_fragment);
+
+        if (articleFrag != null) {
+            DecimalFormat formatter = new DecimalFormat("#,###.00");
+            articleFrag.setCounterText(formatter.format(d));
+        }
+    }
 }
 
 

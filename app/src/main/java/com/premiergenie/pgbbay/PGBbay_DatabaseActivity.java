@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.premiergenie.pgbbay.Students.StudentsActivity;
+import com.premiergenie.pgbbay.TODO.TODOActivity;
 
 public class PGBbay_DatabaseActivity extends AppCompatActivity {
 
@@ -65,7 +66,7 @@ public class PGBbay_DatabaseActivity extends AppCompatActivity {
         toDO.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                  Intent intent = new Intent(PGBbay_DatabaseActivity.this, DataDisplayActivity.class);
+                Intent intent = new Intent(PGBbay_DatabaseActivity.this, TODOActivity.class);
                 intent.putExtra("caller", "TODO");
                 startActivity(intent);
 

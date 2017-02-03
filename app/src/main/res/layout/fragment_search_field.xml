@@ -18,11 +18,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"/>
 
-    <EditText
-        android:id="@+id/searchDate"
+    <TextView
+        android:id="@+id/counterText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Date"
+        android:text=""
+        android:textAlignment="center"
+        android:textSize="25dp"
         android:layout_weight="2"/>
     </LinearLayout>
 
@@ -30,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,8 +43,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clear"
-        android:id="@+id/clearButton"
+        android:text="Refresh"
+        android:id="@+id/refreshButton"
         android:layout_weight="0.5"/>
+
     </LinearLayout>
 </LinearLayout>

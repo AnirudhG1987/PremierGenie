@@ -1,5 +1,6 @@
 package com.premiergenie.pgbbay.FeeDetails;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,12 +36,26 @@ public class FeeFragment extends Fragment {
     private DatabaseReference mfiredatabaseRef;
 
     private ProgressBar spinner;
+    private OnDataUpdatedListener mCallback;
 
     private String caller;
 
     private Double expFeeCounter=0.0;
 
     public FeeFragment(){}
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            mCallback = (OnDataUpdatedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnSubmitSelectedListener");
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,8 +95,11 @@ public class FeeFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 FeeDetailsClass feeDetailsClass = dataSnapshot.getValue(FeeDetailsClass.class);
                 feeDetailsClass.setKey(dataSnapshot.getKey());
-                mfeeDetailsList.add(feeDetailsClass);
-                expFeeCounter += feeDetailsClass.getAmountPaid();
+                if(feeDetailsClass.getDatePaid().contains("2017")) {
+                    mfeeDetailsList.add(feeDetailsClass);
+                    expFeeCounter += feeDetailsClass.getAmountPaid();
+                    mCallback.onDataUpdated(expFeeCounter);
+                }
                 spinner.setVisibility(View.GONE);
             }
 
@@ -166,7 +184,6 @@ public class FeeFragment extends Fragment {
             public FeeFragment.FeeDetailsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.activity_recycler_item, parent, false);
-
                 return new FeeFragment.FeeDetailsHolder(itemView);
             }
 
@@ -202,6 +219,11 @@ public class FeeFragment extends Fragment {
         if(adapter!=null) {
             adapter.cleanup();
         }
+    }
+
+
+    public interface OnDataUpdatedListener{
+        void onDataUpdated(double d);
     }
 
 

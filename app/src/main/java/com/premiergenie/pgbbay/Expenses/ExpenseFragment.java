@@ -1,5 +1,6 @@
 package com.premiergenie.pgbbay.Expenses;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.premiergenie.pgbbay.FeeDetails.FeeFragment;
 import com.premiergenie.pgbbay.R;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class ExpenseFragment extends Fragment {
     private FirebaseRecyclerAdapter<ExpenseDetailsClass, ExpenseFragment.ExpDetailsHolder> adapter;
 
     private DatabaseReference mfiredatabaseRef;
+    private FeeFragment.OnDataUpdatedListener mCallback;
 
     private ProgressBar spinner;
 
@@ -41,6 +44,19 @@ public class ExpenseFragment extends Fragment {
     private Double expFeeCounter=0.0;
 
     public ExpenseFragment(){}
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            mCallback = (FeeFragment.OnDataUpdatedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnSubmitSelectedListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,17 +67,12 @@ public class ExpenseFragment extends Fragment {
 
         mexpDetailsList = new ArrayList<>();
 
-     /*   String sName = "", date = "";
-        if(getArguments()!=null) {
-            sName = getArguments().getString("sName");
-            date = getArguments().getString("date");
-        }
-*/
+
          mfiredatabaseRef = FirebaseDatabase.getInstance().getReference("expenses");
 
 
         spinner=(ProgressBar)rootview.findViewById(R.id.progressBar);
-        // spinner.setVisibility(View.VISIBLE);
+        spinner.setVisibility(View.VISIBLE);
 
 
 
@@ -82,7 +93,8 @@ public class ExpenseFragment extends Fragment {
                 expenseDetailsClass.setKey(dataSnapshot.getKey());
                 mexpDetailsList.add(expenseDetailsClass);
                 expFeeCounter += expenseDetailsClass.getAmountPaid();
-                //spinner.setVisibility(View.GONE);
+                mCallback.onDataUpdated(expFeeCounter);
+                spinner.setVisibility(View.GONE);
             }
 
             @Override
@@ -153,9 +165,6 @@ public class ExpenseFragment extends Fragment {
         return rootview;
 
     }
-
-
-
 
     private void attachRecyclerViewAdapter() {
 

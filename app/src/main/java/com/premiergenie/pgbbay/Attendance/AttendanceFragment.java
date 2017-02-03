@@ -38,6 +38,7 @@ public class AttendanceFragment extends Fragment {
     private ProgressBar spinner;
 
 
+
    public AttendanceFragment() {
         // Required empty public constructor
     }
@@ -75,7 +76,9 @@ public class AttendanceFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 AttendanceClass attendanceClass = dataSnapshot.getValue(AttendanceClass.class);
                 attendanceClass.setKey(dataSnapshot.getKey());
-                mattendanceList.add(attendanceClass);
+                if(attendanceClass.getDate().contains("2017")) {
+                    mattendanceList.add(attendanceClass);
+                }
                 spinner.setVisibility(View.GONE);
             }
 
@@ -201,6 +204,8 @@ public class AttendanceFragment extends Fragment {
             adapter.cleanup();
         }
     }
+
+
 
 
     public static class AttendanceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

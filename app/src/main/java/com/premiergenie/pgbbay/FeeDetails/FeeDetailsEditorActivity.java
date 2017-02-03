@@ -120,7 +120,7 @@ public class FeeDetailsEditorActivity extends AppCompatActivity {
 
     private void setupStudentsSpinner() {
 
-        Query query = FirebaseDatabase.getInstance().getReference("students").orderByValue();
+        Query query = FirebaseDatabase.getInstance().getReference("students").orderByChild("firstName");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

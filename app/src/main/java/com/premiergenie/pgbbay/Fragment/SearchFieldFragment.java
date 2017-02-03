@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +28,7 @@ public class SearchFieldFragment extends Fragment {
 
     private Spinner mStudentsSpinner;
     private String mStudent;
+    private View rootview;
 
     ArrayAdapter<String> studentsSpinnerAdapter;
 
@@ -39,6 +40,7 @@ public class SearchFieldFragment extends Fragment {
     }
 
     OnSubmitSelectedListener mCallback;
+    OnClearSelectedListener mClearCallback;
 
 
     @Override
@@ -49,31 +51,45 @@ public class SearchFieldFragment extends Fragment {
             mCallback = (OnSubmitSelectedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                    + " must implement OnSubmitSelectedListener");
         }
+
+        try {
+            mClearCallback = (OnClearSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnClearSelectedListener");
+        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootview = inflater.inflate(R.layout.fragment_search_field, container, false);
+        rootview = inflater.inflate(R.layout.fragment_search_field, container, false);
 
         mStudentsSpinner = (Spinner) rootview.findViewById(R.id.searchSName);
 
         setupStudentsSpinner();
-
-        final EditText sDateEditText = (EditText) rootview.findViewById(R.id.searchDate);
 
         Button b = (Button) rootview.findViewById(R.id.searchSubmit);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // New Intent
-                mCallback.onSubmitClicked(sDateEditText.getText().toString(), mStudent);
+                mCallback.onSubmitClicked(mStudent);
             }
         });
 
+        Button c = (Button) rootview.findViewById(R.id.refreshButton);
+        c.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // New Intent
+                mClearCallback.onClearClicked();
+            }
+        });
 
         return rootview;
     }
@@ -85,12 +101,18 @@ public class SearchFieldFragment extends Fragment {
     }
 
     public interface OnSubmitSelectedListener{
-        void onSubmitClicked(String d, String s);
+        void onSubmitClicked(String s);
     }
 
     public interface OnClearSelectedListener{
         void onClearClicked();
     }
+
+    public void setCounterText(String s) {
+        TextView t = (TextView) rootview.findViewById(R.id.counterText);
+        t.setText(s);
+    }
+
 
     private void setupStudentsSpinner() {
 
