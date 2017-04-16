@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.premiergenie.pgbbay.Attendance.AttendanceClass;
 import com.premiergenie.pgbbay.DividerItemDecoration;
 import com.premiergenie.pgbbay.R;
 
@@ -58,7 +59,10 @@ public class TODOActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+
                 TODOClass task = dataSnapshot.getValue(TODOClass.class);
+                task.setKey(dataSnapshot.getKey());
+
                 int i=0;
 
                 for(;i<mtasksList.size();i++){
@@ -183,6 +187,9 @@ public class TODOActivity extends AppCompatActivity {
 
         @Override
         public boolean onLongClick(View v) {
+
+            DatabaseReference mfiredatabaseRef = FirebaseDatabase.getInstance().getReference("todo");
+            mfiredatabaseRef.child(mtask.getKey()).removeValue();
             return true;
         }
 

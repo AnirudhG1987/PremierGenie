@@ -1,8 +1,12 @@
 package com.premiergenie.pgbbay.Students;
 
+import lombok.Data;
+
 /**
  * Created by Anirudh on 10/9/2016.
  */
+
+@Data
 public class StudentClass {
 
     private String key;
@@ -30,7 +34,7 @@ public class StudentClass {
         this.curriculum = curriculum;
     }
 
-
+/*
     public int getGrade(){return grade;}
     public String getFirstName(){return firstName;}
     public String getLastName(){return lastName;}
@@ -46,5 +50,7 @@ public class StudentClass {
     public void setKey(String key){
         this.key=key;
     }
+*/
+
 
 }

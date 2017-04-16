@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.premiergenie.pgbbay.DividerItemDecoration;
 import com.premiergenie.pgbbay.R;
 
@@ -44,7 +45,9 @@ public class StudentsActivity extends AppCompatActivity {
 
         mfiredatabaseRef = FirebaseDatabase.getInstance().getReference("students");
 
-        mfiredatabaseRef.addChildEventListener(new ChildEventListener() {
+        Query query = mfiredatabaseRef.orderByChild("firstName");
+
+        query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 StudentClass studentClass = dataSnapshot.getValue(StudentClass.class);

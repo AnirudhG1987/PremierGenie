@@ -22,7 +22,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.premiergenie.pgbbay.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class AttendanceFragment extends Fragment {
@@ -60,15 +64,19 @@ public class AttendanceFragment extends Fragment {
         String sName = "", date = "";
         if(getArguments()!=null) {
              sName = getArguments().getString("sName");
-             date = getArguments().getString("date");
+             date = getArguments().getString("sDate");
         }
 
+
         Query latestAttendance;
-        if(sName!=null) {
+        if(date!=null && !date.isEmpty()) {
+            latestAttendance = mfiredatabaseRef.orderByChild("date").equalTo(date);
+        }
+        else if(sName!=null ){
             latestAttendance = mfiredatabaseRef.orderByChild("studentName").equalTo(sName);
         }
         else {
-            latestAttendance = mfiredatabaseRef;
+            latestAttendance = mfiredatabaseRef.orderByChild("date");
         }
 
         latestAttendance.addChildEventListener(new ChildEventListener() {
@@ -76,8 +84,12 @@ public class AttendanceFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 AttendanceClass attendanceClass = dataSnapshot.getValue(AttendanceClass.class);
                 attendanceClass.setKey(dataSnapshot.getKey());
-                if(attendanceClass.getDate().contains("2017")) {
-                    mattendanceList.add(attendanceClass);
+                // Need attendance only for this year.
+                int currYear = Calendar.getInstance().get(Calendar.YEAR);
+                if(attendanceClass.getDate().contains(""+currYear)) {
+                    //mattendanceList.add(attendanceClass);
+                    mattendanceList.add(0, attendanceClass);
+
                 }
                 spinner.setVisibility(View.GONE);
             }

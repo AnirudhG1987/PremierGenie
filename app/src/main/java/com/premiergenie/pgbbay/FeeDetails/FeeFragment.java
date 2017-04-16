@@ -23,7 +23,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.premiergenie.pgbbay.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class FeeFragment extends Fragment {
 
@@ -85,7 +89,7 @@ public class FeeFragment extends Fragment {
             latestAttendance = mfiredatabaseRef.orderByChild("studentName").equalTo(sName);
         }
         else {
-            latestAttendance = mfiredatabaseRef;
+            latestAttendance = mfiredatabaseRef.orderByChild("datePaid");
         }
 
 
@@ -95,8 +99,25 @@ public class FeeFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 FeeDetailsClass feeDetailsClass = dataSnapshot.getValue(FeeDetailsClass.class);
                 feeDetailsClass.setKey(dataSnapshot.getKey());
-                if(feeDetailsClass.getDatePaid().contains("2017")) {
-                    mfeeDetailsList.add(feeDetailsClass);
+
+                // Need attendance only for this year.
+                int currYear = Calendar.getInstance().get(Calendar.YEAR);
+                if(feeDetailsClass.getDatePaid().contains(""+currYear)) {
+
+                    try {
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+                        String dateInString = feeDetailsClass.getDatePaid();
+
+                        Date date = formatter.parse(dateInString);
+                        feeDetailsClass.setDatePaid(formatter.format(date));
+                        mfiredatabaseRef.child(feeDetailsClass.getKey()).setValue(feeDetailsClass);
+                        //System.out.println(formatter.format(date));
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    mfeeDetailsList.add(0,feeDetailsClass);
                     expFeeCounter += feeDetailsClass.getAmountPaid();
                     mCallback.onDataUpdated(expFeeCounter);
                 }

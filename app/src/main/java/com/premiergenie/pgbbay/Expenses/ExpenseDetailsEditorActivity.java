@@ -6,6 +6,7 @@ import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +37,7 @@ public class ExpenseDetailsEditorActivity extends AppCompatActivity {
             month_x=month +1;
             day_x=day;
 
-            mDateEditText.setText(year_x + "-" + month_x + "-" + day_x );
+            mDateEditText.setText(year_x + "-" + String.format("%02d",month_x) + "-" + String.format("%02d",day_x));
 
         }
 
@@ -68,6 +69,8 @@ public class ExpenseDetailsEditorActivity extends AppCompatActivity {
         day_x = cal.get(Calendar.DAY_OF_MONTH);
 
         mDateEditText = (EditText) findViewById(R.id.edit_fdate);
+        mDateEditText.setInputType(InputType.TYPE_NULL);
+
         mAmountPaidEditText = (EditText) findViewById(R.id.edit_famount);
 
         mDateEditText.setOnClickListener(new View.OnClickListener() {

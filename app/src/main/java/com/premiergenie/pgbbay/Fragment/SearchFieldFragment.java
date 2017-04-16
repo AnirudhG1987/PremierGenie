@@ -1,8 +1,12 @@
 package com.premiergenie.pgbbay.Fragment;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -30,7 +36,13 @@ public class SearchFieldFragment extends Fragment {
     private String mStudent;
     private View rootview;
 
+    private TextView mCounterText;
+
+    private EditText mDateEditText;
+
+
     ArrayAdapter<String> studentsSpinnerAdapter;
+
 
    private List<String> mstudentsList;
 
@@ -40,6 +52,7 @@ public class SearchFieldFragment extends Fragment {
     }
 
     OnSubmitSelectedListener mCallback;
+    OnDateSelectedListener mDateCallBack;
     OnClearSelectedListener mClearCallback;
 
 
@@ -61,7 +74,19 @@ public class SearchFieldFragment extends Fragment {
                     + " must implement OnClearSelectedListener");
         }
 
+
+        try {
+            mDateCallBack = (OnDateSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement Date selected");
+        }
     }
+
+
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,14 +96,29 @@ public class SearchFieldFragment extends Fragment {
 
         mStudentsSpinner = (Spinner) rootview.findViewById(R.id.searchSName);
 
+        mCounterText = (TextView) rootview.findViewById(R.id.counterText);
+
         setupStudentsSpinner();
+
+        mDateEditText = (EditText) rootview.findViewById(R.id.searchSDate);
+        mDateEditText.setInputType(InputType.TYPE_NULL);
+
+        mDateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDateCallBack.onDateClicked();
+            }
+        });
+
+
+
 
         Button b = (Button) rootview.findViewById(R.id.searchSubmit);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // New Intent
-                mCallback.onSubmitClicked(mStudent);
+                mCallback.onSubmitClicked(mStudent,mDateEditText.getText().toString());
             }
         });
 
@@ -94,6 +134,10 @@ public class SearchFieldFragment extends Fragment {
         return rootview;
     }
 
+
+
+
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
@@ -101,23 +145,36 @@ public class SearchFieldFragment extends Fragment {
     }
 
     public interface OnSubmitSelectedListener{
-        void onSubmitClicked(String s);
+        void onSubmitClicked(String s, String d);
     }
 
     public interface OnClearSelectedListener{
         void onClearClicked();
     }
 
-    public void setCounterText(String s) {
-        TextView t = (TextView) rootview.findViewById(R.id.counterText);
-        t.setText(s);
+    public interface OnDateSelectedListener{
+        void onDateClicked();
     }
 
+    public void setCounterText(String s) {
+
+        mCounterText.setText(s);
+    }
+
+
+    public void clearDateText() {
+
+        mDateEditText.setText("");
+    }
+
+    public void setDateText(String s) {
+        mDateEditText.setText(s);
+    }
 
     private void setupStudentsSpinner() {
 
 
-        Query query = FirebaseDatabase.getInstance().getReference("students").orderByValue();
+        Query query = FirebaseDatabase.getInstance().getReference("students").orderByChild("firstName");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -164,10 +221,5 @@ public class SearchFieldFragment extends Fragment {
             }
 
         });
-
-
     }
-
-
-
 }

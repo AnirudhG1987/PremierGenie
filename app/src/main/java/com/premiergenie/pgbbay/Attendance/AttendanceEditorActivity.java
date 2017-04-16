@@ -7,6 +7,7 @@ import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,7 +59,9 @@ public class AttendanceEditorActivity extends AppCompatActivity {
             month_x=month +1;
             day_x=day;
 
-            mDateEditText.setText(year_x + "-" + month_x + "-" + day_x);
+           // String formatted = String.format("%03d", num);
+
+            mDateEditText.setText(year_x + "-" + String.format("%02d",month_x) + "-" + String.format("%02d",day_x));
 
         }
 
@@ -83,7 +86,7 @@ public class AttendanceEditorActivity extends AppCompatActivity {
        day_x = cal.get(Calendar.DAY_OF_MONTH);
 
        mDateEditText = (EditText) findViewById(R.id.edit_date);
-
+       mDateEditText.setInputType(InputType.TYPE_NULL);
        mDateEditText.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
@@ -117,14 +120,16 @@ public class AttendanceEditorActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-     //   coursesSpinnerAdapter.clear();
-        instructorSpinnerAdapter.clear();
-        studentsSpinnerAdapter.clear();
+        if(instructorSpinnerAdapter!=null) {
+            instructorSpinnerAdapter.clear();
+        }
+        if(studentsSpinnerAdapter!=null) {
+            studentsSpinnerAdapter.clear();
+        }
     }
 
 
     @Override
-
     protected Dialog onCreateDialog(int id){
         return new DatePickerDialog(this, dpickerListener, year_x, month_x, day_x );
     }
@@ -369,12 +374,12 @@ public class AttendanceEditorActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_udpate:
-              //  mfiredatabaseRef.child(mKey).setValue(new AttendanceClass(mDateEditText.getText().toString(),
-                     //   mNameEditText.getText().toString(), mInstructor, mCourse  ));
-                mfiredatabaseRef.child(mKey).setValue(new AttendanceClass(mDateEditText.getText().toString(),
-                       mStudent, mInstructor, mCourse  ));
-                clearData();
-                Toast.makeText(this,"Attendance Updated",Toast.LENGTH_SHORT).show();
+                if(mKey!=null ) {
+                    mfiredatabaseRef.child(mKey).setValue(new AttendanceClass(mDateEditText.getText().toString(),
+                            mStudent, mInstructor, mCourse));
+                    clearData();
+                    Toast.makeText(this, "Attendance Updated", Toast.LENGTH_SHORT).show();
+                }
                 return true;
 
             case android.R.id.home:

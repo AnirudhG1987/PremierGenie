@@ -24,7 +24,10 @@ import com.google.firebase.database.Query;
 import com.premiergenie.pgbbay.FeeDetails.FeeFragment;
 import com.premiergenie.pgbbay.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ExpenseFragment extends Fragment {
 
@@ -81,7 +84,7 @@ public class ExpenseFragment extends Fragment {
      //       latestAttendance = mfiredatabaseRef.orderByChild("studentName").equalTo(sName);
         //}
        // else {
-            latestAttendance = mfiredatabaseRef;
+            latestAttendance = mfiredatabaseRef.orderByChild("datePaid");
         //}
 
 
@@ -91,7 +94,26 @@ public class ExpenseFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 ExpenseDetailsClass expenseDetailsClass = dataSnapshot.getValue(ExpenseDetailsClass.class);
                 expenseDetailsClass.setKey(dataSnapshot.getKey());
-                mexpDetailsList.add(expenseDetailsClass);
+                if (expenseDetailsClass.getDatePaid().length() < 10) {
+
+                    try {
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+                        String dateInString = expenseDetailsClass.getDatePaid();
+
+                        Date date = formatter.parse(dateInString);
+                        expenseDetailsClass.setDatePaid(formatter.format(date));
+                        mfiredatabaseRef.child(expenseDetailsClass.getKey()).setValue(expenseDetailsClass);
+                        //System.out.println(formatter.format(date));
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+
+                mexpDetailsList.add(0,expenseDetailsClass);
                 expFeeCounter += expenseDetailsClass.getAmountPaid();
                 mCallback.onDataUpdated(expFeeCounter);
                 spinner.setVisibility(View.GONE);
@@ -182,10 +204,10 @@ public class ExpenseFragment extends Fragment {
             @Override
             protected void populateViewHolder(ExpenseFragment.ExpDetailsHolder v, ExpenseDetailsClass model, int position) {
 
-                v.etype.setText(model.getexpenseType());
+                v.etype.setText(model.getExpenseType());
                 v.eamountPaid.setText(model.getAmountPaid());
                 v.edatePaid.setText(model.getDatePaid());
-                v.ename.setText(model.getexpenseDetail());
+                v.ename.setText(model.getExpenseDetail());
 
             }
 
@@ -239,10 +261,10 @@ public class ExpenseFragment extends Fragment {
         private void bindAttendance(ExpenseDetailsClass expenseDetailsClass) {
 
             mexpDetails = expenseDetailsClass;
-            etype.setText(mexpDetails.getexpenseType());
+            etype.setText(mexpDetails.getExpenseType());
             eamountPaid.setText(String.format("%d",mexpDetails.getAmountPaid()));
             edatePaid.setText(mexpDetails.getDatePaid());
-            ename.setText(mexpDetails.getexpenseDetail());
+            ename.setText(mexpDetails.getExpenseDetail());
         }
 
 
@@ -251,9 +273,9 @@ public class ExpenseFragment extends Fragment {
             Context context = itemView.getContext();
 
             Intent intent = new Intent(context, ExpenseDetailsEditorActivity.class);
-            intent.putExtra("expense", mexpDetails.getexpenseDetail());
+            intent.putExtra("expense", mexpDetails.getExpenseDetail());
             intent.putExtra("amountPaid", mexpDetails.getAmountPaid());
-            intent.putExtra("type", mexpDetails.getexpenseType());
+            intent.putExtra("type", mexpDetails.getExpenseType());
             intent.putExtra("datePaid", mexpDetails.getDatePaid());
             intent.putExtra("key", mexpDetails.getKey());
 

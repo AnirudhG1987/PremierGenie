@@ -14,17 +14,26 @@
         android:orientation="horizontal">
     <Spinner
         android:id="@+id/searchSName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2"/>
+        android:layout_weight="3"/>
 
-    <TextView
+
+        <EditText
+            android:id="@+id/searchSDate"
+            android:hint="Date"
+            android:inputType="text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" />
+
+        <TextView
         android:id="@+id/counterText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text=""
         android:textAlignment="center"
-        android:textSize="25dp"
+        android:textSize="21dp"
         android:layout_weight="2"/>
     </LinearLayout>
 

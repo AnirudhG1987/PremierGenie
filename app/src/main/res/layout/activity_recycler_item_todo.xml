@@ -4,11 +4,12 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/task_item"
-        android:textSize="30dp"
-        android:textColor="@color/colorPrimaryDark"
-        style="@style/AttendanceViewStyle" />
+        android:textSize="20dp"
+        android:textColor="@android:color/black"
+        android:text="Something" />
 
 </LinearLayout>

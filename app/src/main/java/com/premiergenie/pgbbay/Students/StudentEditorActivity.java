@@ -86,10 +86,28 @@ public class StudentEditorActivity extends AppCompatActivity {
 
     private void insertData(){
 
+        int grade;
+        if(!mGradeEditText.getText().toString().isEmpty()){
+            grade = 0;
+        }
+        else
+        {
+            grade = Integer.parseInt(mGradeEditText.getText().toString());
+        }
+
+        int age;
+        if(!mAgeEditText.getText().toString().isEmpty()){
+            age = 0;
+        }
+        else
+        {
+            age = Integer.parseInt(mAgeEditText.getText().toString());
+        }
+
         StudentClass studentClass = new StudentClass(mFirstNameEditText.getText().toString(),
                 mLastNameEditText.getText().toString(),mParentNameEditText.getText().toString(),
-                mSchoolNameEditText.getText().toString(),Integer.parseInt(mGradeEditText.getText().toString()),
-                Integer.parseInt(mAgeEditText.getText().toString()), mPrimaryEmailEditText.getText().toString(),
+                mSchoolNameEditText.getText().toString(),grade,
+                age, mPrimaryEmailEditText.getText().toString(),
                 mPhoneEditText.getText().toString(),mCurriculumEditText.getText().toString());
 
         mfiredatabaseRef.push().setValue(studentClass);
@@ -129,10 +147,29 @@ public class StudentEditorActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_udpate:
+
+                int grade;
+                if(!mGradeEditText.getText().toString().isEmpty()){
+                    grade = 0;
+                }
+                else
+                {
+                    grade = Integer.parseInt(mGradeEditText.getText().toString());
+                }
+
+                int age;
+                if(!mAgeEditText.getText().toString().isEmpty()){
+                    age = 0;
+                }
+                else
+                {
+                    age = Integer.parseInt(mAgeEditText.getText().toString());
+                }
+
                 mfiredatabaseRef.child(mKey).setValue(new StudentClass(mFirstNameEditText.getText().toString(),
                         mLastNameEditText.getText().toString(),mParentNameEditText.getText().toString(),
-                        mSchoolNameEditText.getText().toString(),Integer.parseInt(mGradeEditText.getText().toString()),
-                        Integer.parseInt(mAgeEditText.getText().toString()), mPrimaryEmailEditText.getText().toString(),
+                        mSchoolNameEditText.getText().toString(),grade,
+                        age, mPrimaryEmailEditText.getText().toString(),
                         mPhoneEditText.getText().toString(),mCurriculumEditText.getText().toString()));
 
                 clearData();

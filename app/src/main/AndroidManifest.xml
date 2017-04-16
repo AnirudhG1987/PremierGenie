@@ -28,40 +28,33 @@
         <activity
             android:name=".PGBbay_DatabaseActivity"
             android:label="@string/pg_database" />
-
         <activity
             android:name=".Attendance.AttendanceEditorActivity"
             android:label="Attendance Editor" />
         <activity
             android:name=".DataDisplayActivity"
             android:label="FileUpload" />
-
         <activity
             android:name=".Authentication.SignupActivity"
             android:label="Signup" />
         <activity
             android:name=".Authentication.ResetPasswordActivity"
             android:label="ResetPassword" />
-
         <activity
             android:name=".Expenses.ExpenseDetailsEditorActivity"
             android:label="Expense Editor" />
-
         <activity
             android:name=".FeeDetails.FeeDetailsEditorActivity"
             android:label="Fee Editor" />
-
         <activity
             android:name=".TODO.TODOActivity"
             android:label="TODO" />
-
         <activity
             android:name=".Students.StudentsActivity"
             android:label="Students" />
         <activity
             android:name=".Students.StudentEditorActivity"
             android:label="Student Editor" />
-
     </application>
 
 </manifest>
